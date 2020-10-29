@@ -13,6 +13,7 @@ export class Debt extends Document {
 
   @Prop({
     type: DebtorSchema,
+    required: true,
   })
   debtor: Debtor;
 
@@ -22,8 +23,8 @@ export class Debt extends Document {
   amount: number;
 
   @Prop({
-    required: true,
     enum: Object.values(CurrencyCode),
+    required: true,
   })
   currencyCode: string;
 
@@ -43,8 +44,8 @@ export class Debt extends Document {
   contractNumber: number;
 
   @Prop({
-    required: false,
     type: [String],
+    required: false,
   })
   documents: string[];
 
