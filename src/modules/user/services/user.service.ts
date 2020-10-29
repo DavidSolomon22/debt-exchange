@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PaginateResult, PaginateOptions } from 'mongoose';
-import { User } from '../models';
+import { User } from '../schemas';
 import { UserRepository } from '../repositories';
 
 @Injectable()

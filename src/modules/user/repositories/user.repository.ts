@@ -1,7 +1,7 @@
 import { PaginateModel, PaginateResult, PaginateOptions } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from '../models';
+import { User } from '../schemas';
 import { UserCreateDto } from '../dtos';
 import { UserUpdateDto } from '../dtos/user-update.dto';
 import { FilterQuery } from 'mongoose';

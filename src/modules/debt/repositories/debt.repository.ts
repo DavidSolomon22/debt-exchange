@@ -1,7 +1,7 @@
 import { PaginateModel, PaginateResult, PaginateOptions } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Debt } from '../models';
+import { Debt } from '../schemas';
 import { DebtCreateDto } from '../dtos';
 import { DebtUpdateDto } from '../dtos/debt-update.dto';
 import { FilterQuery } from 'mongoose';
