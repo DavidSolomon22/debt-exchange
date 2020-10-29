@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document } from 'mongoose';
+import { UserRole } from 'src/common/constants'
 
 @Schema()
 export class User extends Document {
@@ -29,10 +30,15 @@ export class User extends Document {
   })
   surname: string;
 
-  @Prop([String])
+  @Prop({
+    type: [String],
+    enum: Object.values(UserRole),
+  })
   roles: string[];
 
-  @Prop()
+  @Prop({
+    required: true,
+  })
   isOrganization: boolean;
 }
 
