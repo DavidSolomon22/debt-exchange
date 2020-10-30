@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MongoExceptionFilter, MongooseExceptionFilter } from './filters';
@@ -10,7 +11,9 @@ async function bootstrap() {
     new MongooseExceptionFilter(),
     new MongoExceptionFilter(),
   );
-  await app.listen(3000);
+  const configService = app.get(ConfigService);
+  const port = configService.get<number>('PORT');
+  await app.listen(port);
 
   if (module.hot) {
     module.hot.accept();
