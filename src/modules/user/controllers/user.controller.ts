@@ -17,7 +17,7 @@ import { UserRepository } from '../repositories';
 import { UserCreateDto } from '../dtos';
 import { UserUpdateDto } from '../dtos/user-update.dto';
 import { ParseSortParamsPipe } from 'src/pipes';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { RolesGuard } from 'src/guards';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserService } from '../services';
 

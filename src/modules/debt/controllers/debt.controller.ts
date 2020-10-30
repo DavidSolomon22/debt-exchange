@@ -18,11 +18,13 @@ import { DebtService } from '../services';
 import { DebtCreateDto } from '../dtos';
 import { DebtUpdateDto } from '../dtos/debt-update.dto';
 import { ParseSortParamsPipe } from 'src/pipes';
-import { RolesGuard } from 'src/guards/roles.guard';
+import { RolesGuard } from 'src/guards';
 import { Roles } from 'src/decorators/roles.decorator';
+import { JwtAuthGuard } from 'src/guards';
 
 @Controller('debts')
-@UseGuards(RolesGuard)
+// @UseGuards(RolesGuard)
+@UseGuards(JwtAuthGuard)
 export class DebtController {
   constructor(
     private debtRepository: DebtRepository,

@@ -27,7 +27,7 @@ export class UserService {
     return await this.userRepository.getUser(id);
   }
 
-  async getOneByEmail(email: string): Promise<User> {
-    return await this.userRepository.getOneByEmail(email);
+  async getOneByEmailWithHash(email: string): Promise<User> {
+    return await this.userRepository.getOneByEmailWithHash(email);
   }
 }

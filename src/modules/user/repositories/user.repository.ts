@@ -74,9 +74,12 @@ export class UserRepository {
     return await this.userModel.findByIdAndDelete(id);
   }
 
-  async getOneByEmail(email: string): Promise<any> {
+  async getOneByEmailWithHash(email: string): Promise<any> {
     return await this.userModel
       .findOne({ email: email })
+      .select(
+        'firstName surname email emailConfirmed passwordHash roles isOrganization',
+      )
       .lean()
       .exec();
   }

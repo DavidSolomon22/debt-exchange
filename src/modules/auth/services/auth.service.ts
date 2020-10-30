@@ -13,27 +13,28 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
+  async validateUser(email: string, password: string): Promise<User> {
+    const user = await this.userService.getOneByEmailWithHash(email);
+    if (user && (await compare(password, user.passwordHash))) {
+      delete user.passwordHash;
+      return user;
+    }
+    return null;
+  }
+
+  async loginUser(user: any) {
+    const { _id, email } = user;
+    const payload = { sub: _id, email: email };
+    return {
+      access_token: this.jwtService.sign(payload),
+    };
+  }
+
   async registerUser(user: RegisterDto): Promise<UserDto> {
     const { password } = user;
     const passwordHash = await hash(password, 10);
     let userForCreation = new UserCreateDto();
     userForCreation = { ...user, passwordHash };
     return await this.userService.createUser(userForCreation);
-  }
-
-  async loginUser(user: any) {
-    const payload = { sub: user._id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
-
-  async validateUser(email: string, password: string): Promise<User> {
-    const user = await this.userService.getOneByEmail(email);
-    if (user && (await compare(password, user.passwordHash))) {
-      user.passwordHash === undefined;
-      return user;
-    }
-    return null;
   }
 }
