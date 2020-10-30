@@ -37,4 +37,12 @@ export class AuthService {
     userForCreation = { ...user, passwordHash };
     return await this.userService.createUser(userForCreation);
   }
+
+  jwtCookieExtractor(req: any) {
+    let token = null;
+    if (req && req.headers && req.headers.cookie) {
+      token = req.headers.cookie.split('jwt=')[1];
+    }
+    return token;
+  }
 }
