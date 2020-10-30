@@ -21,15 +21,13 @@ import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 import { UserService } from '../services';
 
-@Controller('Users')
+@Controller('users')
 @UseGuards(RolesGuard)
 export class UserController {
-  constructor(private userRepository: UserRepository, private userService: UserService) {}
-
-  @Post()
-  async createUser(@Body() createUserDto: UserCreateDto) {
-    return await this.userRepository.createUser(createUserDto);
-  }
+  constructor(
+    private userRepository: UserRepository,
+    private userService: UserService,
+  ) {}
 
   @Get()
   @Roles('admin')
@@ -63,7 +61,7 @@ export class UserController {
     };
     const filterParams = {
       minAge,
-      maxAge
+      maxAge,
     };
     return await this.userService.getPaginatedUsers(options, filterParams);
   }

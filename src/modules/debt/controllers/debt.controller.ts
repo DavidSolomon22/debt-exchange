@@ -21,10 +21,13 @@ import { ParseSortParamsPipe } from 'src/pipes';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { Roles } from 'src/decorators/roles.decorator';
 
-@Controller('Debts')
+@Controller('debts')
 @UseGuards(RolesGuard)
 export class DebtController {
-  constructor(private debtRepository: DebtRepository, private debtService: DebtService) {}
+  constructor(
+    private debtRepository: DebtRepository,
+    private debtService: DebtService,
+  ) {}
 
   @Post()
   async createDebt(@Body() createDebtDto: DebtCreateDto) {
@@ -57,7 +60,7 @@ export class DebtController {
       populate: populates,
       sort: orderBy,
     };
-    return await this.debtService.getPaginatedDebts(options)
+    return await this.debtService.getPaginatedDebts(options);
   }
 
   @Get(':id')

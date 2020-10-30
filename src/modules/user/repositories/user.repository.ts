@@ -2,7 +2,7 @@ import { PaginateModel, PaginateResult, PaginateOptions } from 'mongoose';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from '../schemas';
-import { UserCreateDto } from '../dtos';
+import { UserCreateDto, UserDto } from '../dtos';
 import { UserUpdateDto } from '../dtos/user-update.dto';
 import { FilterQuery } from 'mongoose';
 
@@ -13,9 +13,11 @@ export class UserRepository {
     private userModel: PaginateModel<User>,
   ) {}
 
-  async createUser(user: UserCreateDto): Promise<User> {
-    const createdCat = new this.userModel(user);
-    return await createdCat.save(); // nie ma zadnej fajnej opcji aby zrobic select i populate, mozna tylko wykonac drugi request do bazy
+  async createUser(user: UserCreateDto): Promise<UserDto> {
+    const userForCreation = new this.userModel(user);
+    const createdUser = await userForCreation.save();
+    createdUser.passwordHash = undefined;
+    return await createdUser; // nie ma zadnej fajnej opcji aby zrobic select i populate, mozna tylko wykonac drugi request do bazy
   }
 
   // done
@@ -32,7 +34,7 @@ export class UserRepository {
   }
 
   // ogarnac populate
-  async getUser(id: string, options: PaginateOptions): Promise<User> {
+  async getUser(id: string, options: PaginateOptions = {}): Promise<User> {
     const { select, populate } = options;
     let { lean } = options;
     if (lean === undefined || lean === null) {
@@ -70,5 +72,12 @@ export class UserRepository {
   // done
   async deleteUser(id: string): Promise<User> {
     return await this.userModel.findByIdAndDelete(id);
+  }
+
+  async getOneByEmail(email: string): Promise<any> {
+    return await this.userModel
+      .findOne({ email: email })
+      .lean()
+      .exec();
   }
 }

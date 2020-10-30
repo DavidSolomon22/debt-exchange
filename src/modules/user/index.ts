@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 import { HttpModule, Module } from '@nestjs/common';
 import { UserController } from './controllers';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,15 +14,17 @@ import { UserService } from './services';
         name: User.name,
         useFactory: () => {
           const schema = UserSchema;
-          // eslint-disable-next-line @typescript-eslint/no-var-requires
           schema.plugin(require('mongoose-paginate-v2'));
+          schema.plugin(require('mongoose-unique-validator'), {
+            message: 'User with email {VALUE} already exists.',
+          });
           return schema;
         },
       },
     ]),
   ],
   controllers: [UserController],
-  exports: [],
+  exports: [UserService, UserRepository],
   providers: [UserRepository, UserService],
 })
 export class UserModule {}

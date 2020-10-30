@@ -1,4 +1,7 @@
 export class UserCreateDto {
-  name: string;
-  age: number;
+  email: string;
+  passwordHash: string;
+  firstName: string;
+  surname: string;
+  isOrganization: boolean;
 }
