@@ -4,11 +4,13 @@ import { UserController } from './controllers';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas';
 import { UserRepository } from './repositories';
-import { UserService } from './services';
+import { UserService, EmailService } from './services';
+import {EmailTokenModule} from 'src/modules/email-token/'
 
 @Module({
   imports: [
     HttpModule,
+    EmailTokenModule,
     MongooseModule.forFeatureAsync([
       {
         name: User.name,
@@ -25,6 +27,6 @@ import { UserService } from './services';
   ],
   controllers: [UserController],
   exports: [UserService],
-  providers: [UserRepository, UserService],
+  providers: [UserRepository, UserService, EmailService],
 })
 export class UserModule {}

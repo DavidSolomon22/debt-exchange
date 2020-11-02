@@ -14,8 +14,8 @@ export class DebtRepository {
   ) {}
 
   async createDebt(debt: DebtCreateDto): Promise<Debt> {
-    const createdCat = new this.debtModel(debt);
-    return await createdCat.save(); // nie ma zadnej fajnej opcji aby zrobic select i populate, mozna tylko wykonac drugi request do bazy
+    const createdDebt = new this.debtModel(debt);
+    return await createdDebt.save(); // nie ma zadnej fajnej opcji aby zrobic select i populate, mozna tylko wykonac drugi request do bazy
   }
 
   // done

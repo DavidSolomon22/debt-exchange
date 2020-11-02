@@ -3,10 +3,14 @@ import { PaginateResult, PaginateOptions } from 'mongoose';
 import { User } from '../schemas';
 import { UserRepository } from '../repositories';
 import { UserCreateDto, UserDto } from '../dtos';
-
+import {EmailService} from './email.service';
+import {EmailTokenService} from 'src/modules/email-token/services'
 @Injectable()
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userRepository: UserRepository,
+    private emailService: EmailService,
+    private emailTokenService: EmailTokenService) {}
 
   async getPaginatedUsers(
     options: PaginateOptions,
@@ -20,7 +24,11 @@ export class UserService {
   }
 
   async createUser(user: UserCreateDto): Promise<UserDto> {
-    return await this.userRepository.createUser(user);
+    const createdUser = await this.userRepository.createUser(user)
+    const createdToken = await this.emailTokenService.createEmailToken(createdUser.email)
+    console.log(createdToken)
+    await this.emailService.emailConfirmation(createdUser.email, createdToken.hash);
+    return createdUser
   }
 
   async getOne(id: string): Promise<User> {
