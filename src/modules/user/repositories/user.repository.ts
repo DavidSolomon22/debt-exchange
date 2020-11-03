@@ -5,6 +5,7 @@ import { User } from '../schemas';
 import { UserCreateDto, UserDto } from '../dtos';
 import { UserUpdateDto } from '../dtos/user-update.dto';
 import { FilterQuery } from 'mongoose';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserRepository {
@@ -75,6 +76,16 @@ export class UserRepository {
         runValidators: true,
         context: 'query',
       })
+  }
+
+  async resetUserPassword(email: string, password: string):Promise<string>{
+    const hashPassword = await hash(password,10)
+    await this.userModel.findOneAndUpdate({email: email}, {passwordHash: hashPassword}, {
+      new: true,
+      runValidators: true,
+      context: 'query',
+    })
+    return password
   }
 
   // done

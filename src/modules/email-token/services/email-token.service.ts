@@ -23,7 +23,17 @@ export class EmailTokenService {
         } else {
             return false
         }
+    }
 
+    async resetPassword (id: string, email: string):Promise<Boolean>{
+        const emailToken = await this.emailTokenRepository.getByIdAndEmail(id,email)
+        if(emailToken){
+            this.userService.resetPassword(email)
+            await this.emailTokenRepository.deleteToken(emailToken._id)
+            return true
+        } else {
+            return false
+        }
     }
     private createTokenPayload(email: string):EmailTokenCreateDto{
         return{
@@ -32,7 +42,7 @@ export class EmailTokenService {
             validTo: this.makeExpirationTime()
         }
     }
-    private makeid(length:number):string {
+    makeid(length:number):string {
         var result = "";
         var characters =
           "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

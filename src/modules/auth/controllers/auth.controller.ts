@@ -12,6 +12,7 @@ import { UserService } from 'src/modules/user/services';
 import { RegisterDto } from '../dtos';
 import { AuthService } from '../services';
 import { LocalAuthGuard } from 'src/guards';
+import { ResetPassword } from '../dtos'
 
 @Controller('auth')
 export class AuthController {
@@ -25,9 +26,14 @@ export class AuthController {
     return await this.authService.registerUser(registerDto);
   }
 
+  @Post('reset-password')
+  async resetPassword(@Body() resetPassword: ResetPassword){
+    return await this.userService.resetPasswordRequest(resetPassword.email)
+  }
+
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  async login(@Req() req: Request, @Res() res: Response) {
+  async login(@Req() req: Request, @Res() res: Response):Promise<any> {
     const { access_token } = await this.authService.loginUser(req.user);
     res.cookie('jwt', access_token, { httpOnly: true });
     res.status(200).json(req.user);
