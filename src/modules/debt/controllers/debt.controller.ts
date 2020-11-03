@@ -19,7 +19,7 @@ import { DebtCreateDto } from '../dtos';
 import { DebtUpdateDto } from '../dtos/debt-update.dto';
 import { ParseSortParamsPipe } from 'src/pipes';
 import { Roles } from 'src/decorators/roles.decorator';
-import { JwtAuthGuard, RolesGuard, DebtAccessGuard } from 'src/guards';
+import { JwtAuthGuard, DebtAccessGuard } from 'src/guards';
 import { UserRole } from 'src/common/constants';
 
 @Controller('debts')
@@ -36,7 +36,6 @@ export class DebtController {
   }
 
   @Get()
-  @Roles('admin')
   async getDebts(
     @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
     pageNumber: number,
