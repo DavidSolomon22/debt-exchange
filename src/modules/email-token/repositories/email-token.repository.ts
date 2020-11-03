@@ -14,4 +14,10 @@ export class EmailTokenRepository {
         const createdEmailToken = new this.emailToken(emailToken);
         return await createdEmailToken.save();
       }
+      async getByIdAndEmail(id: string, email: string):Promise<EmailToken>{
+        return await this.emailToken.findOne({hash: id, email: email})
+      }
+      async deleteToken(id:string):Promise<void>{
+        await this.emailToken.findByIdAndDelete(id)
+      }
 }

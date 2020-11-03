@@ -1,9 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { MailerService } from '@nestjs-modules/mailer';
-
+import {ConfirmationEmail} from 'src/common/constants/email.constant'
 @Injectable()
 export class EmailService {
-  constructor(private readonly mailerService: MailerService) {}
+  constructor(
+    private readonly mailerService: MailerService
+  ) {}
   
   public async emailConfirmation(email: string, hash: string): Promise<any> {
       try{
@@ -13,7 +15,7 @@ export class EmailService {
           to: email, // list of receivers
           from: 'noreply@debtex.com', // sender address
           subject: 'Confirm your email', // Subject line
-          text: 'Please Confirm Your Email', // plaintext body
+          html: ConfirmationEmail(email, hash),
         })
         return mail
       } catch(err){

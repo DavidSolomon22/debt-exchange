@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Inject, forwardRef } from '@nestjs/common';
 import { PaginateResult, PaginateOptions } from 'mongoose';
 import { User } from '../schemas';
 import { UserRepository } from '../repositories';
@@ -33,6 +33,10 @@ export class UserService {
 
   async getOne(id: string): Promise<User> {
     return await this.userRepository.getUser(id);
+  }
+
+  async confirmEmail(email: string):Promise<void>{
+    await this.userRepository.confirmUserEmail(email)
   }
 
   async getOneByEmailWithHash(email: string): Promise<User> {

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { HttpModule, Module } from '@nestjs/common';
+import { HttpModule, Module, forwardRef } from '@nestjs/common';
 import { UserController } from './controllers';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas';
@@ -10,7 +10,7 @@ import {EmailTokenModule} from 'src/modules/email-token/'
 @Module({
   imports: [
     HttpModule,
-    EmailTokenModule,
+    forwardRef(()=>EmailTokenModule ),
     MongooseModule.forFeatureAsync([
       {
         name: User.name,

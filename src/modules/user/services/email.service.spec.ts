@@ -1,9 +1,10 @@
 import { EmailService } from './email.service'
 import { MailerService } from '@nestjs-modules/mailer';
 
-describe('CatsController', () => {
+describe('EmailServiceController', () => {
     let emailService: EmailService;
     let mailerService: MailerService;
+
     beforeEach(() => {
         emailService = new EmailService(mailerService);
     });
@@ -12,5 +13,6 @@ describe('CatsController', () => {
         it('should have email confirmation method', () => {
             expect(emailService.emailConfirmation).toBeTruthy()
         });
+
     });
 });

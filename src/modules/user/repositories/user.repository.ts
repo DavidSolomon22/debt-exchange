@@ -17,7 +17,7 @@ export class UserRepository {
     const userForCreation = new this.userModel(user);
     const createdUser = await userForCreation.save();
     createdUser.passwordHash = undefined;
-    return await createdUser; // nie ma zadnej fajnej opcji aby zrobic select i populate, mozna tylko wykonac drugi request do bazy
+    return await createdUser;
   }
 
   // done
@@ -67,6 +67,14 @@ export class UserRepository {
       .select(select)
       .populate(populate)
       .lean(lean);
+  }
+
+  async confirmUserEmail(email: string): Promise<User> {
+    return await this.userModel.findOneAndUpdate({email: email}, {emailConfirmed: true}, {
+        new: true,
+        runValidators: true,
+        context: 'query',
+      })
   }
 
   // done
