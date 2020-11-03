@@ -1,5 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Document } from 'mongoose';
+import { Document, Types } from 'mongoose';
 import { Interest, InterestSchema } from './interest.schema';
 import { Debtor, DebtorSchema } from './debtor.schema';
 import { CurrencyCode } from 'src/common/constants';
@@ -7,15 +7,23 @@ import { CurrencyCode } from 'src/common/constants';
 @Schema()
 export class Debt extends Document {
   @Prop({
-    type: [InterestSchema],
+    type: Types.ObjectId,
+    ref: 'User',
+    required: true,
   })
-  interests: Interest;
+  owner: Types.ObjectId;
 
   @Prop({
     type: DebtorSchema,
     required: true,
   })
   debtor: Debtor;
+
+  @Prop({
+    type: [InterestSchema],
+    required: false,
+  })
+  interests: Interest;
 
   @Prop({
     required: true,

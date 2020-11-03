@@ -18,12 +18,11 @@ import { DebtService } from '../services';
 import { DebtCreateDto } from '../dtos';
 import { DebtUpdateDto } from '../dtos/debt-update.dto';
 import { ParseSortParamsPipe } from 'src/pipes';
-import { RolesGuard } from 'src/guards';
 import { Roles } from 'src/decorators/roles.decorator';
-import { JwtAuthGuard } from 'src/guards';
+import { JwtAuthGuard, RolesGuard, DebtAccessGuard } from 'src/guards';
+import { UserRole } from 'src/common/constants';
 
 @Controller('debts')
-// @UseGuards(RolesGuard)
 @UseGuards(JwtAuthGuard)
 export class DebtController {
   constructor(
@@ -66,6 +65,8 @@ export class DebtController {
   }
 
   @Get(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(DebtAccessGuard)
   async getDebt(
     @Param('id') id: string,
     @Query('fields', new DefaultValuePipe([]), ParseArrayPipe)
@@ -77,7 +78,7 @@ export class DebtController {
       select: fields,
       populate: populates,
     };
-    const debt = await this.debtRepository.getDebt(id, options);
+    const debt = await this.debtService.getDebt(id, options);
     if (!debt) {
       throw new NotFoundException();
     } else {

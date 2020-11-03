@@ -11,10 +11,10 @@ import { LocalStrategy, JwtStrategy } from './strategies';
   imports: [
     ConfigModule,
     UserModule,
-    PassportModule,
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
       secret: 'someSecret',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '8h' },
     }),
   ],
   controllers: [AuthController],

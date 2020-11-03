@@ -12,4 +12,8 @@ export class DebtService {
   ): Promise<PaginateResult<Debt>> {
     return await this.debtRepository.getPaginatedDebts(options);
   }
+
+  async getDebt(id: string, options: PaginateOptions = {}): Promise<Debt> {
+    return await this.debtRepository.getDebt(id, options);
+  }
 }
