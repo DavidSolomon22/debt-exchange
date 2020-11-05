@@ -19,7 +19,7 @@ export class JwtExceptionFilter implements ExceptionFilter {
 
     res.status(status).json({
       statusCode: status,
-      message: `jsonwebtoken ${exception.name}: ${exception.message}`,
+      message: `jsonwebtoken.${exception.name}: ${exception.message}`,
       error: 'Unauthorized',
     });
   }
