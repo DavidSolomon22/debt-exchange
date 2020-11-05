@@ -12,6 +12,7 @@ import {
   DefaultValuePipe,
   ParseArrayPipe,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { DebtRepository } from '../repositories';
 import { DebtService } from '../services';
@@ -37,6 +38,7 @@ export class DebtController {
 
   @Get()
   async getDebts(
+    @Request() req,
     @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
     pageNumber: number,
     @Query('pageSize', new DefaultValuePipe(10), ParseIntPipe)

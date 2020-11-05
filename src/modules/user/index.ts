@@ -5,12 +5,12 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './schemas';
 import { UserRepository } from './repositories';
 import { UserService, EmailService } from './services';
-import {EmailTokenModule} from 'src/modules/email-token/'
+import { EmailTokenModule } from 'src/modules/email-token/';
 
 @Module({
   imports: [
     HttpModule,
-    forwardRef(()=>EmailTokenModule ),
+    forwardRef(() => EmailTokenModule),
     MongooseModule.forFeatureAsync([
       {
         name: User.name,

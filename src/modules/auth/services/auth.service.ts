@@ -1,16 +1,20 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserService } from 'src/modules/user/services';
 import { RegisterDto } from '../dtos';
 import { UserCreateDto, UserDto } from 'src/modules/user/dtos';
 import { hash, compare } from 'bcrypt';
 import { User } from 'src/modules/user/schemas';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
+import { UtilsService } from 'src/utils/services';
+import { TokenExpiredError } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UserService,
     private jwtService: JwtService,
+    private configService: ConfigService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<User> {
@@ -22,11 +26,31 @@ export class AuthService {
     return null;
   }
 
-  async loginUser(user: any) {
-    const { _id, email, roles } = user;
-    const payload = { sub: _id, email, roles };
+  async validateToken(token: string): Promise<any> {
+    return this.jwtService.verifyAsync(token, {
+      ignoreExpiration: false,
+      secret: this.configService.get<string>('JWT_SECRET'),
+    });
+  }
+
+  validateTokenSync(token: string): any {
+    return this.jwtService.verify(token, {
+      ignoreExpiration: false,
+      secret: this.configService.get<string>('JWT_SECRET'),
+    });
+  }
+
+  async generateTokens(user: any) {
+    const { _id, sub, email, roles } = user;
+    const accessTokenPayload = { sub: _id || sub, email, roles };
+    const refreshTokenPayload = { sub: _id || sub, email, roles };
     return {
-      access_token: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(accessTokenPayload, {
+        expiresIn: '5s',
+      }),
+      refreshToken: this.jwtService.sign(refreshTokenPayload, {
+        expiresIn: '10s',
+      }),
     };
   }
 
@@ -38,10 +62,11 @@ export class AuthService {
     return await this.userService.createUser(userForCreation);
   }
 
-  jwtCookieExtractor(req: any) {
+  jwtCookieExtractor(req: any, cookieName: string): string {
+    // console.log('\njwtCookieExtractor');
     let token = null;
     if (req && req.headers && req.headers.cookie) {
-      token = req.headers.cookie.split('jwt=')[1];
+      token = UtilsService.getCookie(req.headers.cookie, cookieName);
     }
     return token;
   }
