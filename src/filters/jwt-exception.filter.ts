@@ -11,11 +11,14 @@ import {
 export class JwtExceptionFilter implements ExceptionFilter {
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
+    const res = ctx.getResponse<Response>();
     const status = HttpStatus.UNAUTHORIZED;
 
-    response.status(status).json({
-      code: status,
+    res.clearCookie('access_token');
+    res.clearCookie('refresh_token');
+
+    res.status(status).json({
+      statusCode: status,
       message: `jsonwebtoken ${exception.name}: ${exception.message}`,
       error: 'Unauthorized',
     });

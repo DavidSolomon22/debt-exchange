@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { UserService } from 'src/modules/user/services';
 import { RegisterDto } from '../dtos';
 import { UserCreateDto, UserDto } from 'src/modules/user/dtos';
@@ -7,7 +7,6 @@ import { User } from 'src/modules/user/schemas';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { UtilsService } from 'src/utils/services';
-import { TokenExpiredError } from 'jsonwebtoken';
 
 @Injectable()
 export class AuthService {
@@ -33,23 +32,16 @@ export class AuthService {
     });
   }
 
-  validateTokenSync(token: string): any {
-    return this.jwtService.verify(token, {
-      ignoreExpiration: false,
-      secret: this.configService.get<string>('JWT_SECRET'),
-    });
-  }
-
   async generateTokens(user: any) {
     const { _id, sub, email, roles } = user;
     const accessTokenPayload = { sub: _id || sub, email, roles };
     const refreshTokenPayload = { sub: _id || sub, email, roles };
     return {
       accessToken: this.jwtService.sign(accessTokenPayload, {
-        expiresIn: '5s',
+        expiresIn: '5m',
       }),
       refreshToken: this.jwtService.sign(refreshTokenPayload, {
-        expiresIn: '10s',
+        expiresIn: '8h',
       }),
     };
   }
@@ -63,7 +55,6 @@ export class AuthService {
   }
 
   jwtCookieExtractor(req: any, cookieName: string): string {
-    // console.log('\njwtCookieExtractor');
     let token = null;
     if (req && req.headers && req.headers.cookie) {
       token = UtilsService.getCookie(req.headers.cookie, cookieName);

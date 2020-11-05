@@ -11,11 +11,11 @@ import {
 export class MongoExceptionFilter implements ExceptionFilter {
   catch(exception: MongoError, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
+    const res = ctx.getResponse<Response>();
     const status = HttpStatus.BAD_REQUEST;
 
-    response.status(status).json({
-      code: status,
+    res.status(status).json({
+      statusCode: status,
       message: `${exception.name}: ${exception.message}`,
       error: 'Bad Request',
     });

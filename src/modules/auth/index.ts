@@ -5,20 +5,20 @@ import { PassportModule } from '@nestjs/passport';
 import { UserModule } from '../user';
 import { AuthController } from './controllers';
 import { AuthService } from './services';
-import { LocalStrategy, JwtStrategy } from './strategies';
+import { LocalStrategy } from './strategies';
 
 @Global()
 @Module({
   imports: [
     ConfigModule,
     UserModule,
-    PassportModule.register({ defaultStrategy: 'jwt' }),
+    PassportModule,
     JwtModule.register({
       secret: 'someSecret',
     }),
   ],
   controllers: [AuthController],
   exports: [AuthService],
-  providers: [AuthService, LocalStrategy, JwtStrategy],
+  providers: [AuthService, LocalStrategy],
 })
 export class AuthModule {}
