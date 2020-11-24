@@ -1,0 +1,22 @@
+version: '3'
+services:
+  mongo:
+    image: 'mongo:latest'
+    ports:
+      - '28017:27017'
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+      - JWT_SECRET=U68kT5rUQuVEKqDMqzbd
+      - MONGO_URL=mongodb://mongo:27017/debt-exchange-db
+    ports:
+      - '8080:3000'
+    depends_on:
+      - mongo

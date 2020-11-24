@@ -5,10 +5,13 @@ import {
   ExceptionFilter,
   ArgumentsHost,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 
 @Catch(JsonWebTokenError)
 export class JwtExceptionFilter implements ExceptionFilter {
+  private readonly logger = new Logger(JwtExceptionFilter.name);
+
   catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse<Response>();
@@ -16,6 +19,11 @@ export class JwtExceptionFilter implements ExceptionFilter {
 
     res.clearCookie('access_token');
     res.clearCookie('refresh_token');
+
+    this.logger.log(
+      `jsonwebtoken.${exception.name}: ${exception.message}`,
+      exception.stack,
+    );
 
     res.status(status).json({
       statusCode: status,

@@ -1,4 +1,0 @@
-export enum LegalStatus {
-  NATURAL_PERSON = 'NATURAL_PERSON',
-  ORGANIZATION = 'ORGANIZATION',
-}

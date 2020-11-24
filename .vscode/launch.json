@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Docker: nest server",
+      "type": "node",
+      "request": "attach",
+      "remoteRoot": "/app",
+      "port": 9229,
+      "address": "0.0.0.0",
+      "localRoot": "${workspaceFolder}",
+      "protocol": "inspector",
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    },
+  ]
+}

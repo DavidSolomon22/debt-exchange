@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { UserService } from 'src/modules/user/services';
+import { UserService } from 'modules/user/services';
 import { RegisterDto } from '../dtos';
-import { UserCreateDto, UserDto } from 'src/modules/user/dtos';
+import { UserCreateDto, UserDto } from 'modules/user/dtos';
 import { hash, compare } from 'bcrypt';
-import { User } from 'src/modules/user/schemas';
+import { User } from 'modules/user/schemas';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { UtilsService } from 'src/utils/services';
+import { UtilsService } from 'utils/services';
 
 @Injectable()
 export class AuthService {
@@ -46,11 +46,10 @@ export class AuthService {
     };
   }
 
-  async registerUser(user: RegisterDto): Promise<UserDto> {
+  async registerUser(user: RegisterDto): Promise<User> {
     const { password } = user;
     const passwordHash = await hash(password, 10);
-    let userForCreation = new UserCreateDto();
-    userForCreation = { ...user, passwordHash };
+    const userForCreation: UserCreateDto = { ...user, passwordHash };
     return await this.userService.createUser(userForCreation);
   }
 

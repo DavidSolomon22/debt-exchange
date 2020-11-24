@@ -1,27 +1,35 @@
-import { Body, Controller, Post, Req, UseGuards, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Req,
+  UseGuards,
+  Res,
+  Get,
+} from '@nestjs/common';
 import { Response, Request } from 'express';
-import { UserDto } from 'src/modules/user/dtos';
-import { UserService } from 'src/modules/user/services';
-import { RegisterDto } from '../dtos';
-import { AuthService } from '../services';
-import { LocalAuthGuard } from 'src/guards';
-import { ResetPassword } from '../dtos';
+import { UserDto } from 'modules/user/dtos';
+import { RegisterDto } from 'modules/auth/dtos';
+import { AuthService } from 'modules/auth/services';
+import { LocalAuthGuard } from 'guards';
+import { plainToClass } from 'class-transformer';
 
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private userService: UserService,
-    private authService: AuthService,
-  ) {}
+  constructor(private authService: AuthService) {}
+
+  @Get()
+  async test() {
+    return 'test';
+  }
 
   @Post('register')
   async register(@Body() registerDto: RegisterDto): Promise<UserDto> {
-    return await this.authService.registerUser(registerDto);
-  }
-
-  @Post('reset-password')
-  async resetPassword(@Body() resetPassword: ResetPassword) {
-    return await this.userService.resetPasswordRequest(resetPassword.email);
+    const user = await this.authService.registerUser(registerDto);
+    const userDto = plainToClass(UserDto, user.toObject(), {
+      enableImplicitConversion: true,
+    });
+    return userDto;
   }
 
   @UseGuards(LocalAuthGuard)

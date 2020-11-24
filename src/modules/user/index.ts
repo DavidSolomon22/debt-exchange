@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-import { HttpModule, Module, forwardRef } from '@nestjs/common';
-import { UserController } from './controllers';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { UserController } from './controllers';
 import { User, UserSchema } from './schemas';
 import { UserRepository } from './repositories';
-import { UserService, EmailService } from './services';
-import { EmailTokenModule } from 'src/modules/email-token/';
+import { UserService } from './services';
 
 @Module({
   imports: [
     HttpModule,
-    forwardRef(() => EmailTokenModule),
     MongooseModule.forFeatureAsync([
       {
         name: User.name,
@@ -27,6 +25,6 @@ import { EmailTokenModule } from 'src/modules/email-token/';
   ],
   controllers: [UserController],
   exports: [UserService],
-  providers: [UserRepository, UserService, EmailService],
+  providers: [UserRepository, UserService],
 })
 export class UserModule {}

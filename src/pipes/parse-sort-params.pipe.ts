@@ -7,7 +7,7 @@ export class ParseSortParamsPipe implements PipeTransform {
       return null;
     } else {
       return value
-        .map(sortParam => {
+        .map((sortParam) => {
           if (sortParam.includes(' desc')) {
             return `-${sortParam.replace(' desc', '')}`;
           } else {

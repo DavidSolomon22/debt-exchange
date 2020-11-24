@@ -1,7 +1,6 @@
-export class UserCreateDto {
+export interface UserCreateDto {
   email: string;
   passwordHash: string;
-  firstName: string;
-  surname: string;
-  isOrganization: boolean;
+  firstName?: string;
+  surname?: string;
 }
