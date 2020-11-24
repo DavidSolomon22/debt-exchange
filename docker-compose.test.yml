@@ -14,4 +14,4 @@ services:
       - JWT_SECRET=U68kT5rUQuVEKqDMqzbd
     ports:
       - '9080:3000'
-    command: npm run test:e2e:watch
+    command: npm run test:watch

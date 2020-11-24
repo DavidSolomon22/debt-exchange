@@ -48,7 +48,7 @@ describe('UserRepository', () => {
   });
 
   it('model should be defined', () => {
-    expect(repository).toBeDefined();
+    expect(model).toBeDefined();
   });
 
   describe('createUser', () => {
