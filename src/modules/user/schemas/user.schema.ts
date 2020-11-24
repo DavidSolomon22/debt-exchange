@@ -16,6 +16,12 @@ export class User extends Document {
   passwordHash: string;
 
   @Prop({
+    required: true,
+    default: false,
+  })
+  emailConfirmed?: boolean;
+
+  @Prop({
     required: false,
   })
   firstName?: string;

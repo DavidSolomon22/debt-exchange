@@ -4,7 +4,11 @@ import { UserService } from '.';
 import { UserRepository } from 'modules/user/repositories';
 import { UserCreateDto, UserUpdateDto } from 'modules/user/dtos';
 import { createMock } from '@golevelup/ts-jest';
-import { User } from '../schemas';
+import { EmailService } from 'services/email';
+import { EmailTokenService } from 'modules/email-token/services';
+import { EmailToken } from 'modules/email-token/schemas';
+import { emailTokenCreateDto } from 'modules/email-token/mocks';
+import { User } from 'modules/user/schemas';
 
 const mockedPaginatedUsers: PaginateResult<any> = {
   docs: [
@@ -69,6 +73,8 @@ const userUpdateDto: UserUpdateDto = {
 describe('UserService', () => {
   let service: UserService;
   let repository: UserRepository;
+  let emailService: EmailService;
+  let emailTokenService: EmailTokenService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -118,11 +124,25 @@ describe('UserService', () => {
               ),
           },
         },
+        {
+          provide: EmailService,
+          useValue: {
+            emailConfirmation: jest.fn(),
+          },
+        },
+        {
+          provide: EmailTokenService,
+          useValue: {
+            createEmailToken: jest.fn(),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<UserService>(UserService);
     repository = module.get<UserRepository>(UserRepository);
+    emailService = module.get<EmailService>(EmailService);
+    emailTokenService = module.get<EmailTokenService>(EmailTokenService);
   });
 
   afterEach(() => {
@@ -137,6 +157,14 @@ describe('UserService', () => {
     expect(repository).toBeDefined();
   });
 
+  it('emailService should be defined', () => {
+    expect(emailService).toBeDefined();
+  });
+
+  it('emailTokenService should be defined', () => {
+    expect(emailTokenService).toBeDefined();
+  });
+
   describe('createUser', () => {
     it('should create User', async () => {
       const userMock = createMock<User>({
@@ -148,6 +176,15 @@ describe('UserService', () => {
       const createUserSpy = jest
         .spyOn(repository, 'createUser')
         .mockResolvedValueOnce(userMock);
+
+      const createdEmailToken = createMock<EmailToken>({
+        ...emailTokenCreateDto,
+      });
+      createdEmailToken._id = 'some id';
+      const createEmailTokenSpy = jest
+        .spyOn(emailTokenService, 'createEmailToken')
+        .mockResolvedValueOnce(createdEmailToken);
+
       const response = await service.createUser(mockedUserCreateDto);
       expect(response).toBe(userMock);
       expect(createUserSpy).toBeCalledWith(mockedUserCreateDto);

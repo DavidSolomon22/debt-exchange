@@ -5,6 +5,7 @@ import { User } from '../schemas';
 import { UserCreateDto } from '../dtos';
 import { UserUpdateDto } from '../dtos/user-update.dto';
 import { FilterQuery } from 'mongoose';
+import { hash } from 'bcrypt';
 
 @Injectable()
 export class UserRepository {
@@ -73,5 +74,31 @@ export class UserRepository {
       .select('firstName surname email passwordHash')
       .lean()
       .exec();
+  }
+
+  async confirmUserEmail(email: string): Promise<User> {
+    return await this.userModel.findOneAndUpdate(
+      { email: email },
+      { emailConfirmed: true },
+      {
+        new: true,
+        runValidators: true,
+        context: 'query',
+      },
+    );
+  }
+
+  async resetUserPassword(email: string, password: string): Promise<string> {
+    const hashPassword = await hash(password, 10);
+    await this.userModel.findOneAndUpdate(
+      { email: email },
+      { passwordHash: hashPassword },
+      {
+        new: true,
+        runValidators: true,
+        context: 'query',
+      },
+    );
+    return password;
   }
 }

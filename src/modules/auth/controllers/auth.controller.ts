@@ -13,6 +13,7 @@ import { RegisterDto } from 'modules/auth/dtos';
 import { AuthService } from 'modules/auth/services';
 import { LocalAuthGuard } from 'guards';
 import { plainToClass } from 'class-transformer';
+import { ResetPasswordDto } from '../dtos/reset-password.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -41,5 +42,10 @@ export class AuthController {
     res.cookie('access_token', accessToken, { httpOnly: true });
     res.cookie('refresh_token', refreshToken, { httpOnly: true });
     res.status(200).json(req.user);
+  }
+
+  @Post('reset-password')
+  async resetPassword(@Body() resetPassword: ResetPasswordDto) {
+    return await this.authService.resetPasswordRequest(resetPassword.email);
   }
 }

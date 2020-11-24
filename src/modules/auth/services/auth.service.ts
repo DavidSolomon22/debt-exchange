@@ -53,6 +53,10 @@ export class AuthService {
     return await this.userService.createUser(userForCreation);
   }
 
+  async resetPasswordRequest(email: string): Promise<boolean> {
+    return this.userService.resetPasswordRequest(email);
+  }
+
   jwtCookieExtractor(req: any, cookieName: string): string {
     let token = null;
     if (req && req.headers && req.headers.cookie) {

@@ -4,6 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { EmailToken, EmailTokenSchema } from './schemas';
 import { EmailTokenRepository } from './repositories';
 import { UserModule } from 'modules/user';
+import { EmailTokenService } from './services';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { UserModule } from 'modules/user';
     ]),
   ],
   controllers: [],
-  exports: [],
-  providers: [EmailTokenRepository],
+  exports: [EmailTokenService],
+  providers: [EmailTokenRepository, EmailTokenService],
 })
 export class EmailTokenModule {}

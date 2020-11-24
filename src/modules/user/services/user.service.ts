@@ -3,13 +3,27 @@ import { PaginateResult, PaginateOptions } from 'mongoose';
 import { User } from '../schemas';
 import { UserRepository } from 'modules/user/repositories';
 import { UserCreateDto, UserUpdateDto } from 'modules/user/dtos';
+import { EmailService } from 'services/email';
+import { EmailTokenService } from 'modules/email-token/services';
 
 @Injectable()
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(
+    private userRepository: UserRepository,
+    private emailService: EmailService,
+    private emailTokenService: EmailTokenService,
+  ) {}
 
   async createUser(user: UserCreateDto): Promise<User> {
-    return await this.userRepository.createUser(user);
+    const createdUser = await this.userRepository.createUser(user);
+    const createdToken = await this.emailTokenService.createEmailToken(
+      createdUser.email,
+    );
+    await this.emailService.emailConfirmation(
+      createdUser.email,
+      createdToken.hash,
+    );
+    return createdUser;
   }
 
   async getPaginatedUsers(
@@ -41,5 +55,26 @@ export class UserService {
 
   async getOneByEmailWithHash(email: string): Promise<User> {
     return await this.userRepository.getOneByEmailWithHash(email);
+  }
+
+  async resetPasswordRequest(email: string): Promise<boolean> {
+    const resetPasswordRequestedUser = await this.getOneByEmailWithHash(email);
+    if (resetPasswordRequestedUser) {
+      const createdToken = await this.emailTokenService.createEmailToken(email);
+      await this.emailService.emailResetPassword(email, createdToken.hash);
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  async confirmEmail(email: string): Promise<void> {
+    await this.userRepository.confirmUserEmail(email);
+  }
+
+  async resetPassword(email: string): Promise<void> {
+    const newPassword = this.emailTokenService.makeid(10);
+    await this.userRepository.resetUserPassword(email, newPassword);
+    await this.emailService.emailResetConfirmation(email, newPassword);
   }
 }

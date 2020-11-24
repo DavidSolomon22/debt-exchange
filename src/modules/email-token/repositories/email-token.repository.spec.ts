@@ -1,5 +1,5 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PaginateModel, DocumentQuery } from 'mongoose';
+import { PaginateModel } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 import { createMock } from '@golevelup/ts-jest';
 import { EmailToken } from 'modules/email-token/schemas';
