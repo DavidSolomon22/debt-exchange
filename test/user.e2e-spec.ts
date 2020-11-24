@@ -10,11 +10,15 @@ import { UserModule } from 'modules/user';
 import { AuthModule } from 'modules/auth';
 import { UtilsService } from 'utils/services';
 import {
-  usersForRegistration,
   usersForLogin,
   userForUpdate,
+  usersForCreation,
 } from './mocks/user.mock';
 import { UserDto } from 'modules/user/dtos';
+import { UserRepository } from 'modules/user/repositories';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailerConfigService } from 'config';
 
 describe('UserController (e2e)', () => {
   let app: INestApplication;
@@ -25,6 +29,7 @@ describe('UserController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
+        ConfigModule.forRoot(),
         rootMongooseTestModule({
           useNewUrlParser: true,
           useUnifiedTopology: true,
@@ -33,15 +38,21 @@ describe('UserController (e2e)', () => {
         }),
         UserModule,
         AuthModule,
+        MailerModule.forRootAsync({
+          imports: [ConfigModule],
+          useClass: MailerConfigService,
+          inject: [ConfigService],
+        }),
       ],
     }).compile();
     app = moduleFixture.createNestApplication();
     await app.init();
     server = app.getHttpServer();
 
-    for (const i in usersForRegistration) {
-      const userForRegistration = usersForRegistration[i];
-      await request(server).post('/auth/register').send(userForRegistration);
+    const userRepository = app.get(UserRepository);
+    for (const i in usersForCreation) {
+      const userForCreation = usersForCreation[i];
+      await userRepository.createUser(userForCreation);
     }
     const loginResponse = await request(server)
       .post('/auth/login')

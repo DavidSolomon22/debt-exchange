@@ -3,4 +3,5 @@ export interface UserCreateDto {
   passwordHash: string;
   firstName?: string;
   surname?: string;
+  emailConfirmed?: boolean;
 }

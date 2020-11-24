@@ -24,6 +24,6 @@ import { UserModule } from 'modules/user';
     AuthModule,
   ],
   controllers: [],
-  providers: [MongooseConfigService],
+  providers: [MongooseConfigService, MailerConfigService],
 })
 export class AppModule {}

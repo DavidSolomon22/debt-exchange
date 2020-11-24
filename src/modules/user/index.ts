@@ -27,7 +27,7 @@ import { EmailTokenModule } from 'modules/email-token';
     ]),
   ],
   controllers: [UserController],
-  exports: [UserService],
+  exports: [UserService, EmailService],
   providers: [UserRepository, UserService, EmailService],
 })
 export class UserModule {}

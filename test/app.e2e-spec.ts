@@ -6,6 +6,9 @@ import {
   rootMongooseTestModule,
 } from 'utils/testing-utils';
 import { AuthModule } from 'modules/auth';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MailerConfigService } from 'config';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
@@ -14,6 +17,7 @@ describe('AppController (e2e)', () => {
   beforeEach(async () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [
+        ConfigModule.forRoot(),
         rootMongooseTestModule({
           useNewUrlParser: true,
           useUnifiedTopology: true,
@@ -21,6 +25,11 @@ describe('AppController (e2e)', () => {
           useCreateIndex: true,
         }),
         AuthModule,
+        MailerModule.forRootAsync({
+          imports: [ConfigModule],
+          useClass: MailerConfigService,
+          inject: [ConfigService],
+        }),
       ],
     }).compile();
 
