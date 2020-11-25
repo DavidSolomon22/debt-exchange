@@ -19,6 +19,7 @@ describe('UserService', () => {
           useValue: {
             createEmailToken: jest.fn(),
             getByIdAndEmail: jest.fn(),
+            getByHashAndEmail: jest.fn(),
             deleteToken: jest.fn(),
           },
         },
@@ -69,16 +70,16 @@ describe('UserService', () => {
   describe('confirmUser', () => {
     it('should return true when user was confirmed', async () => {
       emailToken._id = 'some id';
-      const { _id: id, email } = emailToken;
-      const getByIdAndEmailSpy = jest
-        .spyOn(repository, 'getByIdAndEmail')
+      const { _id: id, hash, email } = emailToken;
+      const getByHashAndEmailSpy = jest
+        .spyOn(repository, 'getByHashAndEmail')
         .mockResolvedValueOnce(emailToken);
       const confirmEmailSpy = jest.spyOn(userService, 'confirmEmail');
       const deleteTokenSpy = jest.spyOn(repository, 'deleteToken');
-      const response = await service.confirmUser(id, email);
+      const response = await service.confirmUser(hash, email);
       expect(response).toBe<boolean>(true);
-      expect(getByIdAndEmailSpy).toHaveBeenCalledTimes(1);
-      expect(getByIdAndEmailSpy).toHaveBeenCalledWith(id, email);
+      expect(getByHashAndEmailSpy).toHaveBeenCalledTimes(1);
+      expect(getByHashAndEmailSpy).toHaveBeenCalledWith(hash, email);
       expect(confirmEmailSpy).toHaveBeenCalledTimes(1);
       expect(confirmEmailSpy).toHaveBeenCalledWith(email);
       expect(deleteTokenSpy).toHaveBeenCalledTimes(1);
@@ -86,16 +87,16 @@ describe('UserService', () => {
     });
     it('should return false when email token was not found', async () => {
       emailToken._id = 'some unknown id';
-      const { _id: id, email } = emailToken;
-      const getByIdAndEmailSpy = jest
-        .spyOn(repository, 'getByIdAndEmail')
+      const { hash, email } = emailToken;
+      const getByHashAndEmailSpy = jest
+        .spyOn(repository, 'getByHashAndEmail')
         .mockResolvedValueOnce(null);
       const resetPasswordSpy = jest.spyOn(userService, 'confirmEmail');
       const deleteTokenSpy = jest.spyOn(repository, 'deleteToken');
-      const response = await service.resetPassword(id, email);
+      const response = await service.resetPassword(hash, email);
       expect(response).toBe<boolean>(false);
-      expect(getByIdAndEmailSpy).toHaveBeenCalledTimes(1);
-      expect(getByIdAndEmailSpy).toHaveBeenCalledWith(id, email);
+      expect(getByHashAndEmailSpy).toHaveBeenCalledTimes(1);
+      expect(getByHashAndEmailSpy).toHaveBeenCalledWith(hash, email);
       expect(resetPasswordSpy).not.toHaveBeenCalled();
       expect(deleteTokenSpy).not.toHaveBeenCalled();
     });
@@ -104,16 +105,16 @@ describe('UserService', () => {
   describe('resetPassword', () => {
     it('should return true when password was reseted', async () => {
       emailToken._id = 'some id';
-      const { _id: id, email } = emailToken;
-      const getByIdAndEmailSpy = jest
-        .spyOn(repository, 'getByIdAndEmail')
+      const { _id: id, hash, email } = emailToken;
+      const getByHashAndEmailSpy = jest
+        .spyOn(repository, 'getByHashAndEmail')
         .mockResolvedValueOnce(emailToken);
       const resetPasswordSpy = jest.spyOn(userService, 'resetPassword');
       const deleteTokenSpy = jest.spyOn(repository, 'deleteToken');
-      const response = await service.resetPassword(id, email);
+      const response = await service.resetPassword(hash, email);
       expect(response).toBe<boolean>(true);
-      expect(getByIdAndEmailSpy).toHaveBeenCalledTimes(1);
-      expect(getByIdAndEmailSpy).toHaveBeenCalledWith(id, email);
+      expect(getByHashAndEmailSpy).toHaveBeenCalledTimes(1);
+      expect(getByHashAndEmailSpy).toHaveBeenCalledWith(hash, email);
       expect(resetPasswordSpy).toHaveBeenCalledTimes(1);
       expect(resetPasswordSpy).toHaveBeenCalledWith(email);
       expect(deleteTokenSpy).toHaveBeenCalledTimes(1);
@@ -121,16 +122,16 @@ describe('UserService', () => {
     });
     it('should return false when email token was not found', async () => {
       emailToken._id = 'some unknown id';
-      const { _id: id, email } = emailToken;
-      const getByIdAndEmailSpy = jest
-        .spyOn(repository, 'getByIdAndEmail')
+      const { hash, email } = emailToken;
+      const getByHashAndEmailSpy = jest
+        .spyOn(repository, 'getByHashAndEmail')
         .mockResolvedValueOnce(null);
       const resetPasswordSpy = jest.spyOn(userService, 'resetPassword');
       const deleteTokenSpy = jest.spyOn(repository, 'deleteToken');
-      const response = await service.resetPassword(id, email);
+      const response = await service.resetPassword(hash, email);
       expect(response).toBe<boolean>(false);
-      expect(getByIdAndEmailSpy).toHaveBeenCalledTimes(1);
-      expect(getByIdAndEmailSpy).toHaveBeenCalledWith(id, email);
+      expect(getByHashAndEmailSpy).toHaveBeenCalledTimes(1);
+      expect(getByHashAndEmailSpy).toHaveBeenCalledWith(hash, email);
       expect(resetPasswordSpy).not.toHaveBeenCalled();
       expect(deleteTokenSpy).not.toHaveBeenCalled();
     });
