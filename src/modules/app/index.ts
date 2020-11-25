@@ -5,6 +5,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MongooseConfigService } from 'config';
 import { MailerConfigService } from 'config/services/mailer.config.service';
 import { AuthModule } from 'modules/auth';
+import { DebtModule } from 'modules/debt';
+import { EmailTokenModule } from 'modules/email-token';
 import { UserModule } from 'modules/user';
 
 @Module({
@@ -20,8 +22,10 @@ import { UserModule } from 'modules/user';
       useClass: MailerConfigService,
       inject: [ConfigService],
     }),
-    UserModule,
     AuthModule,
+    DebtModule,
+    EmailTokenModule,
+    UserModule,
   ],
   controllers: [],
   providers: [MongooseConfigService, MailerConfigService],
