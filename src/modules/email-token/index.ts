@@ -3,8 +3,9 @@ import { HttpModule, Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { EmailToken, EmailTokenSchema } from './schemas';
 import { EmailTokenRepository } from './repositories';
-import { UserModule } from 'modules/user';
 import { EmailTokenService } from './services';
+import { EmailTokenController } from './controllers';
+import { UserModule } from 'modules/user';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { EmailTokenService } from './services';
       },
     ]),
   ],
-  controllers: [],
+  controllers: [EmailTokenController],
   exports: [EmailTokenService],
   providers: [EmailTokenRepository, EmailTokenService],
 })

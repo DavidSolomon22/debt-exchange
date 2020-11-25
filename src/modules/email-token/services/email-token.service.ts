@@ -17,9 +17,9 @@ export class EmailTokenService {
     return this.emailTokenRepository.createEmailToken(createdToken);
   }
 
-  async confirmUser(id: string, email: string): Promise<boolean> {
-    const emailToken = await this.emailTokenRepository.getByIdAndEmail(
-      id,
+  async confirmUser(hash: string, email: string): Promise<boolean> {
+    const emailToken = await this.emailTokenRepository.getByHashAndEmail(
+      hash,
       email,
     );
     if (emailToken) {
@@ -31,9 +31,9 @@ export class EmailTokenService {
     }
   }
 
-  async resetPassword(id: string, email: string): Promise<boolean> {
-    const emailToken = await this.emailTokenRepository.getByIdAndEmail(
-      id,
+  async resetPassword(hash: string, email: string): Promise<boolean> {
+    const emailToken = await this.emailTokenRepository.getByHashAndEmail(
+      hash,
       email,
     );
     if (emailToken) {

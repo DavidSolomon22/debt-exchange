@@ -34,7 +34,7 @@ export const ConfirmationEmail = (email: string, hash: string) => {
                                       <td class="grey-block" style="border-collapse: collapse;border: 0;margin: 0;-webkit-text-size-adjust: none;color: #555559;font-family: Arial, sans-serif;font-size: 16px;line-height: 26px;background-color: #fff; text-align:center;">
                                       <div class="mktEditable" id="cta">
                                       <img class="top-image" src="https://i.ibb.co/PN4n2t2/waiting-Registration.png" width="350"/><br><br>
-                                        <a style="background: #007CFF; color: white; text-decoration: none; padding: 10px 20px; font-size: 22; border-radius: 5px;"href="http://localhost:3000/email-tokens/email-verify/${hash}?email=${email}">CONFIRM</a>
+                                        <a style="background: #007CFF; color: white; text-decoration: none; padding: 10px 20px; font-size: 22; border-radius: 5px;"href="http://localhost:8080/email-tokens/${hash}/email-verify?email=${email}">CONFIRM</a>
                                       </div>
                                       </td>
                                   </tr>
@@ -93,7 +93,7 @@ export const ResetPasswordEmail = (email: string, hash: string) => {
                                       <td class="grey-block" style="border-collapse: collapse;border: 0;margin: 0;-webkit-text-size-adjust: none;color: #555559;font-family: Arial, sans-serif;font-size: 16px;line-height: 26px;background-color: #fff; text-align:center;">
                                       <div class="mktEditable" id="cta">
                                       <img class="top-image" src="https://i.ibb.co/PN4n2t2/waiting-Registration.png" width="350"/><br><br>
-                                        <a style="background: #007CFF; color: white; text-decoration: none; padding: 10px 20px; font-size: 22; border-radius: 5px;"href="http://localhost:3000/email-tokens/password-reset/${hash}?email=${email}">CONFIRM</a>
+                                        <a style="background: #007CFF; color: white; text-decoration: none; padding: 10px 20px; font-size: 22; border-radius: 5px;"href="http://localhost:8080/email-tokens/${hash}/password-reset?email=${email}">CONFIRM</a>
                                       </div>
                                       </td>
                                   </tr>

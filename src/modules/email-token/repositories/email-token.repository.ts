@@ -19,6 +19,10 @@ export class EmailTokenRepository {
     return this.emailTokenModel.findOne({ _id: id, email: email });
   }
 
+  async getByHashAndEmail(hash: string, email: string): Promise<EmailToken> {
+    return this.emailTokenModel.findOne({ hash, email });
+  }
+
   async deleteToken(id: string): Promise<EmailToken> {
     return this.emailTokenModel.findByIdAndDelete(id);
   }
