@@ -1,10 +1,4 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PaginateResult } from 'mongoose';
-import { UserService } from 'modules/user/services';
-import { UserRepository } from 'modules/user/repositories';
-import { UserCreateDto, UserUpdateDto } from 'modules/user/dtos';
-import { createMock } from '@golevelup/ts-jest';
-import { User } from 'modules/user/schemas';
 import { EmailTokenController } from '.';
 import { AuthService } from 'modules/auth/services';
 import { NotFoundException } from '@nestjs/common';
