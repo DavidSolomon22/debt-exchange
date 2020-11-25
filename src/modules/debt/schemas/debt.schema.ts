@@ -29,7 +29,7 @@ export class Debt extends Document {
     type: [InterestSchema],
     required: false,
   })
-  interests: Interest;
+  interests?: Interest[];
 
   @Prop({
     required: true,
@@ -50,23 +50,23 @@ export class Debt extends Document {
   @Prop({
     required: false,
   })
-  amountWithInterest: number;
+  amountWithInterest?: number;
 
   @Prop({
     required: false,
   })
-  contractNumber: number;
+  contractNumber?: number;
 
   @Prop({
     type: [String],
     required: false,
   })
-  documents: string[];
+  documents?: string[];
 
   @Prop({
     required: false,
   })
-  evidenceText: number;
+  evidenceText?: number;
 }
 
 export const DebtSchema = SchemaFactory.createForClass(Debt);

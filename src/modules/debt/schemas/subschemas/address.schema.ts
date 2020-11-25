@@ -6,47 +6,47 @@ export class Address extends Document {
   @Prop({
     required: false,
   })
-  street: string;
+  street?: string;
 
   @Prop({
     required: false,
   })
-  houseNumber: string;
+  houseNumber?: string;
 
   @Prop({
     required: false,
   })
-  apartmentNumber: string;
+  apartmentNumber?: string;
 
   @Prop({
     required: false,
   })
-  postalCode: string;
+  postalCode?: string;
 
   @Prop({
     required: false,
   })
-  country: string;
+  country?: string;
 
   @Prop({
     required: false,
   })
-  voivodeship: string;
+  voivodeship?: string;
 
   @Prop({
     required: false,
   })
-  commune: string;
+  commune?: string;
 
   @Prop({
     required: false,
   })
-  city: string;
+  city?: string;
 
   @Prop({
     required: false,
   })
-  district: string;
+  district?: string;
 }
 
 export const AddressSchema = SchemaFactory.createForClass(Address);

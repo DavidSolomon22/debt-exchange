@@ -6,32 +6,32 @@ export class NaturalPerson extends Document {
   @Prop({
     required: false,
   })
-  firstName: string;
+  firstName?: string;
 
   @Prop({
     required: false,
   })
-  secondName: string;
+  secondName?: string;
 
   @Prop({
     required: false,
   })
-  surname: string;
+  surname?: string;
 
   @Prop({
     required: false,
   })
-  documentType: string;
+  documentType?: string;
 
   @Prop({
     required: false,
   })
-  documentNumber: string;
+  documentNumber?: string;
 
   @Prop({
     required: false,
   })
-  taxNumber: string;
+  taxNumber?: string;
 }
 
 export const NaturalPersonSchema = SchemaFactory.createForClass(NaturalPerson);

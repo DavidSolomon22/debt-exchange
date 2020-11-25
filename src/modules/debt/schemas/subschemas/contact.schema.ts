@@ -6,22 +6,22 @@ export class Contact extends Document {
   @Prop({
     required: false,
   })
-  description: string;
+  description?: string;
 
   @Prop({
     required: false,
   })
-  phone: string;
+  phone?: string;
 
   @Prop({
     required: false,
   })
-  email: string;
+  email?: string;
 
   @Prop({
     required: false,
   })
-  fax: string;
+  fax?: string;
 }
 
 export const ContactSchema = SchemaFactory.createForClass(Contact);

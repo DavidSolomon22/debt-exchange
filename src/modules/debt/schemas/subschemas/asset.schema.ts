@@ -6,22 +6,22 @@ export class Asset extends Document {
   @Prop({
     required: false,
   })
-  description: string;
+  description?: string;
 
   @Prop({
     required: false,
   })
-  value: string;
+  value?: string;
 
   @Prop({
     required: false,
   })
-  currency: string;
+  currency?: string;
 
   @Prop({
     required: false,
   })
-  name: string;
+  name?: string;
 }
 
 export const AssetSchema = SchemaFactory.createForClass(Asset);

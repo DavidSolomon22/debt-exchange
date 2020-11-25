@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import { HttpModule, Module } from '@nestjs/common';
-// import { DebtController } from './controllers';
 import { MongooseModule } from '@nestjs/mongoose';
+import { DebtController } from 'modules/debt/controllers';
+import { DebtRepository } from 'modules/debt/repositories';
 import { Debt, DebtSchema } from 'modules/debt/schemas';
-// import { DebtRepository } from './repositories';
-// import { DebtService } from './services';
+import { DebtService } from 'modules/debt/services';
 
 @Module({
   imports: [
@@ -20,11 +20,8 @@ import { Debt, DebtSchema } from 'modules/debt/schemas';
       },
     ]),
   ],
-  controllers: [],
-  // controllers: [DebtController],
+  controllers: [DebtController],
   exports: [],
-  // providers: [DebtRepository, DebtService],
-  // providers: [DebtRepository],
-  providers: [],
+  providers: [DebtRepository, DebtService],
 })
 export class DebtModule {}

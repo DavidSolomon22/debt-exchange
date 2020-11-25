@@ -6,12 +6,12 @@ export class BankAccount extends Document {
   @Prop({
     required: false,
   })
-  IBAN: string;
+  IBAN?: string;
 
   @Prop({
     required: false,
   })
-  number: string;
+  number?: string;
 }
 
 export const BankAccountSchema = SchemaFactory.createForClass(BankAccount);

@@ -6,22 +6,22 @@ export class Organization extends Document {
   @Prop({
     required: false,
   })
-  businessNumber: string;
+  businessNumber?: string;
 
   @Prop({
     required: false,
   })
-  businessRegistry: string;
+  businessRegistry?: string;
 
   @Prop({
     required: false,
   })
-  taxNumber: string;
+  taxNumber?: string;
 
   @Prop({
     required: false,
   })
-  name: string;
+  name?: string;
 }
 
 export const OrganizationSchema = SchemaFactory.createForClass(Organization);
