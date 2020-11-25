@@ -26,7 +26,7 @@ export class EmailTokenController {
 
   @Get(':hash/password-reset')
   async resetPasswordThroughEmailToken(
-    @Param('id') hash: string,
+    @Param('hash') hash: string,
     @Query('email') email: string,
   ): Promise<boolean> {
     const confirmation = await this.emailTokenService.resetPassword(
