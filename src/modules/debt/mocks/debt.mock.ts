@@ -1,6 +1,6 @@
 import { createMock } from '@golevelup/ts-jest';
 import { Country, CurrencyCode, LegalStatus } from 'common/constants';
-import { DebtCreateDto } from 'modules/debt/dtos';
+import { DebtCreateDto, DebtUpdateDto } from 'modules/debt/dtos';
 import { Debt } from 'modules/debt/schemas';
 import { Types } from 'mongoose';
 import { PaginateResult } from 'mongoose';
@@ -18,6 +18,17 @@ export const debt = createMock<Debt>({
 });
 
 export const debtCreateDto: DebtCreateDto = {
+  amount: 10,
+  currencyCode: CurrencyCode.PLN,
+  debtor: {
+    legalStatus: LegalStatus.NATURAL_PERSON,
+    country: Country.PL,
+  },
+  dueDate: new Date(),
+  owner: '5fa10b96ffae5a394a8c6b21',
+};
+
+export const debtUpdateDto: DebtUpdateDto = {
   amount: 10,
   currencyCode: CurrencyCode.PLN,
   debtor: {
@@ -71,3 +82,9 @@ export const paginatedDebts = createMock<PaginateResult<Debt>>({
   totalDocs: 3,
   totalPages: 1,
 });
+
+export const mongooseUpdateOptions = {
+  new: true,
+  runValidators: true,
+  context: 'query',
+};

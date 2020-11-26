@@ -10,13 +10,10 @@ import {
   Query,
   Param,
   NotFoundException,
-  HttpStatus,
-  HttpCode,
+  Patch,
 } from '@nestjs/common';
-import { plainToClass } from 'class-transformer';
 import { JwtAuthGuard } from 'guards';
-import { DebtCreateDto } from 'modules/debt/dtos';
-import { Debt } from 'modules/debt/schemas';
+import { DebtCreateDto, DebtUpdateDto } from 'modules/debt/dtos';
 import { DebtService } from 'modules/debt/services';
 import { ParseSortParamsPipe } from 'pipes';
 
@@ -71,6 +68,27 @@ export class DebtController {
       populate: populates,
     };
     const debt = await this.debtService.getDebt(id, options);
+    if (!debt) {
+      throw new NotFoundException();
+    } else {
+      return debt;
+    }
+  }
+
+  @Patch(':id')
+  async updateDebt(
+    @Param('id') id: string,
+    @Body() debtUpdateDto: DebtUpdateDto,
+    @Query('fields', new DefaultValuePipe([]), ParseArrayPipe)
+    fields?: string[],
+    @Query('populates', new DefaultValuePipe([]), ParseArrayPipe)
+    populates?: string[], // check on real populate
+  ) {
+    const options = {
+      select: fields,
+      populate: populates,
+    };
+    const debt = await this.debtService.updateDebt(id, debtUpdateDto, options);
     if (!debt) {
       throw new NotFoundException();
     } else {

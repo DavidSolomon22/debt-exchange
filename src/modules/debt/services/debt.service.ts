@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { PaginateResult, PaginateOptions } from 'mongoose';
 import { Debt } from '../schemas';
 import { DebtRepository } from '../repositories';
-import { DebtCreateDto } from 'modules/debt/dtos';
+import { DebtCreateDto, DebtUpdateDto } from 'modules/debt/dtos';
 
 @Injectable()
 export class DebtService {
@@ -20,6 +20,14 @@ export class DebtService {
   }
 
   async getDebt(id: string, options: PaginateOptions = {}): Promise<Debt> {
-    return await this.debtRepository.getDebt(id, options);
+    return this.debtRepository.getDebt(id, options);
+  }
+
+  async updateDebt(
+    id: string,
+    debt: DebtUpdateDto,
+    options: PaginateOptions = {},
+  ): Promise<Debt> {
+    return this.debtRepository.updateDebt(id, debt, options);
   }
 }

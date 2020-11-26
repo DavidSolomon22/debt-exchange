@@ -3,7 +3,13 @@ import { PaginateModel } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 import { DebtRepository } from 'modules/debt/repositories';
 import { Debt } from 'modules/debt/schemas';
-import { debtCreateDto, debt, paginatedDebts } from 'modules/debt/mocks';
+import {
+  debtCreateDto,
+  debt,
+  paginatedDebts,
+  debtUpdateDto,
+  mongooseUpdateOptions,
+} from 'modules/debt/mocks';
 import { createEmptyPaginatedResultMock } from 'common/mocks';
 import { createMock } from '@golevelup/ts-jest';
 import { DocumentQuery } from 'mongoose';
@@ -22,6 +28,7 @@ describe('DebtRepository', () => {
             create: jest.fn(),
             paginate: jest.fn(),
             findById: jest.fn(),
+            findByIdAndUpdate: jest.fn(),
           },
         },
       ],
@@ -111,8 +118,54 @@ describe('DebtRepository', () => {
   });
 
   describe('updateDebt', () => {
-    it('', async () => {});
-    it('', async () => {});
+    it('should return one updated debt', async () => {
+      const debtMock = debt;
+      const { _id: id } = debtMock;
+      debtMock.amount = 20;
+      const findByIdAndUpdateSpy = jest
+        .spyOn(model, 'findByIdAndUpdate')
+        .mockReturnValueOnce(
+          createMock<DocumentQuery<Debt, Debt, unknown>>({
+            select: () => ({
+              populate: () => ({
+                lean: jest.fn().mockResolvedValueOnce(debtMock),
+              }),
+            }),
+          }),
+        );
+      const response = await repository.updateDebt(id, {
+        amount: 20,
+      });
+      expect(response).toStrictEqual(debtMock);
+      expect(findByIdAndUpdateSpy).toHaveBeenCalledTimes(1);
+      expect(findByIdAndUpdateSpy).toHaveBeenCalledWith(
+        id,
+        { amount: 20 },
+        mongooseUpdateOptions,
+      );
+    });
+    it('should return null when debt was not found', async () => {
+      const id = 'some unknown id';
+      const findByIdAndUpdateSpy = jest
+        .spyOn(model, 'findByIdAndUpdate')
+        .mockReturnValueOnce(
+          createMock<DocumentQuery<Debt, Debt, unknown>>({
+            select: () => ({
+              populate: () => ({
+                lean: jest.fn().mockResolvedValueOnce(null),
+              }),
+            }),
+          }),
+        );
+      const response = await repository.updateDebt(id, debtUpdateDto);
+      expect(response).toBeNull();
+      expect(findByIdAndUpdateSpy).toHaveBeenCalledTimes(1);
+      expect(findByIdAndUpdateSpy).toHaveBeenCalledWith(
+        id,
+        debtUpdateDto,
+        mongooseUpdateOptions,
+      );
+    });
   });
 
   describe('deleteDebt', () => {

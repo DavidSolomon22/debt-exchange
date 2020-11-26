@@ -26,25 +26,25 @@ export class Debtor extends Document {
     type: [AddressSchema],
     required: false,
   })
-  addresses?: Address;
+  addresses?: Address[];
 
   @Prop({
     type: [ContactSchema],
     required: false,
   })
-  contacts?: Contact;
+  contacts?: Contact[];
 
   @Prop({
     type: [AssetSchema],
     required: false,
   })
-  assets?: Asset;
+  assets?: Asset[];
 
   @Prop({
     type: [BankAccountSchema],
     required: false,
   })
-  bankAccounts?: BankAccount;
+  bankAccounts?: BankAccount[];
 
   @Prop({
     required: true,

@@ -2,7 +2,12 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { AuthService } from 'modules/auth/services';
 import { DebtController } from 'modules/debt/controllers';
 import { DebtService } from 'modules/debt/services';
-import { debtCreateDto, debt, paginatedDebts } from 'modules/debt/mocks';
+import {
+  debtCreateDto,
+  debtUpdateDto,
+  debt,
+  paginatedDebts,
+} from 'modules/debt/mocks';
 import { createEmptyPaginatedResultMock } from 'common/mocks';
 import { Debt } from 'modules/debt/schemas';
 import { NotFoundException } from '@nestjs/common';
@@ -21,6 +26,7 @@ describe('DebtController', () => {
             createDebt: jest.fn(),
             getPaginatedDebts: jest.fn(),
             getDebt: jest.fn(),
+            updateDebt: jest.fn(),
           },
         },
         {
@@ -96,6 +102,28 @@ describe('DebtController', () => {
     });
   });
 
-  describe('', () => {});
+  describe('updateDebt', () => {
+    it('should return one updated debt', async () => {
+      const debtMock = debt;
+      const { _id: id } = debtMock;
+      debtMock.amount = 20;
+      const updateDebtSpy = jest
+        .spyOn(service, 'updateDebt')
+        .mockResolvedValueOnce(debtMock);
+      const response = await controller.updateDebt(id, {
+        amount: 20,
+      });
+      expect(response).toStrictEqual(debtMock);
+      expect(updateDebtSpy).toHaveBeenCalledTimes(1);
+    });
+    it('should throw NotFoundException when debt not found', async () => {
+      const id = 'some unknown id';
+      jest.spyOn(service, 'updateDebt').mockResolvedValueOnce(null);
+      expect(controller.updateDebt(id, debtUpdateDto)).rejects.toThrowError(
+        NotFoundException,
+      );
+    });
+  });
+
   describe('', () => {});
 });

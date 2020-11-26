@@ -42,7 +42,7 @@ export class DebtRepository {
   async updateDebt(
     id: string,
     debt: DebtUpdateDto,
-    options: PaginateOptions,
+    options: PaginateOptions = {},
   ): Promise<Debt> {
     const { select, populate } = options;
     let { lean } = options;
@@ -50,7 +50,7 @@ export class DebtRepository {
       lean = true;
     }
     return await this.debtModel
-      .findByIdAndUpdate(id, debt, {
+      .findByIdAndUpdate(id, debt as any, {
         new: true,
         runValidators: true,
         context: 'query',
