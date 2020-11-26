@@ -2,11 +2,11 @@ import { createMock } from '@golevelup/ts-jest';
 import { Country, CurrencyCode, LegalStatus } from 'common/constants';
 import { DebtCreateDto } from 'modules/debt/dtos';
 import { Debt } from 'modules/debt/schemas';
-import { Debtor } from 'modules/debt/schemas/subschemas/debtor.schema';
 import { Types } from 'mongoose';
 import { PaginateResult } from 'mongoose';
 
 export const debt = createMock<Debt>({
+  _id: new Types.ObjectId() as any,
   amount: 10,
   currencyCode: CurrencyCode.PLN,
   debtor: {

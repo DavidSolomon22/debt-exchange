@@ -5,6 +5,8 @@ import { DebtRepository } from 'modules/debt/repositories';
 import { Debt } from 'modules/debt/schemas';
 import { debtCreateDto, debt, paginatedDebts } from 'modules/debt/mocks';
 import { createEmptyPaginatedResultMock } from 'common/mocks';
+import { createMock } from '@golevelup/ts-jest';
+import { DocumentQuery } from 'mongoose';
 
 describe('DebtRepository', () => {
   let repository: DebtRepository;
@@ -19,6 +21,7 @@ describe('DebtRepository', () => {
           useValue: {
             create: jest.fn(),
             paginate: jest.fn(),
+            findById: jest.fn(),
           },
         },
       ],
@@ -72,8 +75,39 @@ describe('DebtRepository', () => {
   });
 
   describe('getDebt', () => {
-    it('', async () => {});
-    it('', async () => {});
+    it('should return one debt', async () => {
+      const debtMock = debt;
+      const { _id: id } = debtMock;
+      const findByIdSpy = jest.spyOn(model, 'findById').mockReturnValueOnce(
+        createMock<DocumentQuery<Debt, Debt, unknown>>({
+          select: () => ({
+            populate: () => ({
+              lean: jest.fn().mockResolvedValueOnce(debtMock),
+            }),
+          }),
+        }),
+      );
+      const response = await repository.getDebt(id);
+      expect(response).toStrictEqual(debtMock);
+      expect(findByIdSpy).toHaveBeenCalledTimes(1);
+      expect(findByIdSpy).toHaveBeenCalledWith(id);
+    });
+    it('should return null when debt is not found', async () => {
+      const id = 'some unknown id';
+      const findByIdSpy = jest.spyOn(model, 'findById').mockReturnValueOnce(
+        createMock<DocumentQuery<Debt, Debt, unknown>>({
+          select: () => ({
+            populate: () => ({
+              lean: jest.fn().mockResolvedValueOnce(null),
+            }),
+          }),
+        }),
+      );
+      const response = await repository.getDebt(id);
+      expect(response).toBeNull();
+      expect(findByIdSpy).toHaveBeenCalledTimes(1);
+      expect(findByIdSpy).toHaveBeenCalledWith(id);
+    });
   });
 
   describe('updateDebt', () => {

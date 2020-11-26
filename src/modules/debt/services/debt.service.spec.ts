@@ -4,6 +4,7 @@ import { DebtService } from 'modules/debt/services';
 import { debtCreateDto, debt, paginatedDebts } from 'modules/debt/mocks';
 import { Debt } from 'modules/debt/schemas';
 import { createEmptyPaginatedResultMock } from 'common/mocks';
+import { NotFoundException } from '@nestjs/common';
 
 describe('DebtService', () => {
   let service: DebtService;
@@ -18,6 +19,7 @@ describe('DebtService', () => {
           useValue: {
             createDebt: jest.fn(),
             getPaginatedDebts: jest.fn(),
+            getDebt: jest.fn(),
           },
         },
       ],
@@ -69,6 +71,30 @@ describe('DebtService', () => {
         .mockResolvedValue(emptyPaginatedResult);
       const response = await service.getPaginatedDebts();
       expect(response).toStrictEqual(emptyPaginatedResult);
+    });
+  });
+
+  describe('getDebt', () => {
+    it('should return one debt', async () => {
+      const debtMock = debt;
+      const { _id: id } = debtMock;
+      const getDebtSpy = jest
+        .spyOn(repository, 'getDebt')
+        .mockResolvedValueOnce(debtMock);
+      const response = await service.getDebt(id);
+      expect(response).toStrictEqual(debtMock);
+      expect(getDebtSpy).toHaveBeenCalledTimes(1);
+      expect(getDebtSpy).toHaveBeenCalledWith(id, {});
+    });
+    it('should return null when debt is not found', async () => {
+      const id = 'some unknown id';
+      const getDebtSpy = jest
+        .spyOn(repository, 'getDebt')
+        .mockResolvedValueOnce(null);
+      const response = await service.getDebt(id);
+      expect(response).toBeNull();
+      expect(getDebtSpy).toHaveBeenCalledTimes(1);
+      expect(getDebtSpy).toHaveBeenCalledWith(id, {});
     });
   });
 });

@@ -5,6 +5,7 @@ import { DebtService } from 'modules/debt/services';
 import { debtCreateDto, debt, paginatedDebts } from 'modules/debt/mocks';
 import { createEmptyPaginatedResultMock } from 'common/mocks';
 import { Debt } from 'modules/debt/schemas';
+import { NotFoundException } from '@nestjs/common';
 
 describe('DebtController', () => {
   let controller: DebtController;
@@ -19,6 +20,7 @@ describe('DebtController', () => {
           useValue: {
             createDebt: jest.fn(),
             getPaginatedDebts: jest.fn(),
+            getDebt: jest.fn(),
           },
         },
         {
@@ -46,13 +48,11 @@ describe('DebtController', () => {
 
   describe('createDebt', () => {
     it('should return created debt', async () => {
-      const debtMock = debt;
-      debtMock._id = '5fa10b96ffae5a394a8c6b21';
       const createDebtSpy = jest
         .spyOn(service, 'createDebt')
-        .mockResolvedValue(debtMock);
+        .mockResolvedValue(debt);
       const response = await controller.createDebt(debtCreateDto);
-      expect(response).toStrictEqual(debtMock);
+      expect(response).toStrictEqual(debt);
       expect(createDebtSpy).toHaveBeenCalledTimes(1);
       expect(createDebtSpy).toHaveBeenCalledWith(debtCreateDto);
     });
@@ -77,7 +77,25 @@ describe('DebtController', () => {
     });
   });
 
-  describe('', () => {});
+  describe('getDebt', () => {
+    it('should return one debt', async () => {
+      const debtMock = debt;
+      const { _id: id } = debtMock;
+      const getDebtSpy = jest
+        .spyOn(service, 'getDebt')
+        .mockResolvedValueOnce(debtMock);
+      const response = await controller.getDebt(id);
+      expect(response).toStrictEqual(debtMock);
+      expect(getDebtSpy).toHaveBeenCalledTimes(1);
+      expect(getDebtSpy).toHaveBeenCalledWith(id, {});
+    });
+    it('should throw NotFoundException when debt not found', async () => {
+      const id = 'some unknown id';
+      jest.spyOn(service, 'getDebt').mockResolvedValueOnce(null);
+      expect(controller.getDebt(id)).rejects.toThrowError(NotFoundException);
+    });
+  });
+
   describe('', () => {});
   describe('', () => {});
 });
