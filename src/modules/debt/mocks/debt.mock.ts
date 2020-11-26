@@ -17,28 +17,6 @@ export const debt = createMock<Debt>({
   owner: new Types.ObjectId('5fa10b96ffae5a394a8c6b21'),
 });
 
-export const debtCreateDto: DebtCreateDto = {
-  amount: 10,
-  currencyCode: CurrencyCode.PLN,
-  debtor: {
-    legalStatus: LegalStatus.NATURAL_PERSON,
-    country: Country.PL,
-  },
-  dueDate: new Date(),
-  owner: '5fa10b96ffae5a394a8c6b21',
-};
-
-export const debtUpdateDto: DebtUpdateDto = {
-  amount: 10,
-  currencyCode: CurrencyCode.PLN,
-  debtor: {
-    legalStatus: LegalStatus.NATURAL_PERSON,
-    country: Country.PL,
-  },
-  dueDate: new Date(),
-  owner: '5fa10b96ffae5a394a8c6b21',
-};
-
 export const paginatedDebts = createMock<PaginateResult<Debt>>({
   docs: [
     {
@@ -82,6 +60,61 @@ export const paginatedDebts = createMock<PaginateResult<Debt>>({
   totalDocs: 3,
   totalPages: 1,
 });
+
+export const debtCreateDto: DebtCreateDto = {
+  amount: 10,
+  currencyCode: CurrencyCode.PLN,
+  debtor: {
+    legalStatus: LegalStatus.NATURAL_PERSON,
+    country: Country.PL,
+  },
+  dueDate: new Date(),
+  owner: '5fa10b96ffae5a394a8c6b21',
+};
+
+export const debtsForCreation: DebtCreateDto[] = [
+  {
+    amount: 10,
+    currencyCode: CurrencyCode.PLN,
+    debtor: {
+      legalStatus: LegalStatus.NATURAL_PERSON,
+      country: Country.PL,
+    },
+    dueDate: new Date('2020-10-10'),
+    owner: '5fa10b96ffae5a394a8c6b21',
+  },
+  {
+    amount: 20,
+    currencyCode: CurrencyCode.EUR,
+    debtor: {
+      legalStatus: LegalStatus.ORGANIZATION,
+      country: Country.DE,
+    },
+    dueDate: new Date('2020-11-10'),
+    owner: '5fbe7a331f881d0091cbbdee',
+  },
+  {
+    amount: 30,
+    currencyCode: CurrencyCode.USD,
+    debtor: {
+      legalStatus: LegalStatus.NATURAL_PERSON,
+      country: Country.US,
+    },
+    dueDate: new Date('2020-12-10'),
+    owner: '5fbe7bacaf793200be87d277',
+  },
+];
+
+export const debtUpdateDto: DebtUpdateDto = {
+  amount: 10,
+  currencyCode: CurrencyCode.PLN,
+  debtor: {
+    legalStatus: LegalStatus.NATURAL_PERSON,
+    country: Country.PL,
+  },
+  dueDate: new Date(),
+  owner: '5fa10b96ffae5a394a8c6b21',
+};
 
 export const mongooseUpdateOptions = {
   new: true,
