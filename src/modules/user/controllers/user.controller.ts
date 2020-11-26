@@ -12,6 +12,7 @@ import {
   ParseArrayPipe,
   UseGuards,
   HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { UserDto, UserUpdateDto } from 'modules/user/dtos';
 import { ParseSortParamsPipe } from 'pipes';
@@ -102,13 +103,11 @@ export class UserController {
   }
 
   @Delete(':id')
-  @HttpCode(204)
-  async deleteUser(@Param('id') id: string): Promise<any> {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteUser(@Param('id') id: string): Promise<void> {
     const user = await this.userService.deleteUser(id);
     if (!user) {
       throw new NotFoundException();
-    } else {
-      return;
     }
   }
 }

@@ -27,6 +27,7 @@ describe('DebtController', () => {
             getPaginatedDebts: jest.fn(),
             getDebt: jest.fn(),
             updateDebt: jest.fn(),
+            deleteDebt: jest.fn(),
           },
         },
         {
@@ -125,5 +126,22 @@ describe('DebtController', () => {
     });
   });
 
-  describe('', () => {});
+  describe('deleteDebt', () => {
+    it('should return undefined when debt deleted successfully', async () => {
+      const debtMock = debt;
+      const { _id: id } = debtMock;
+      const deleteDebtSpy = jest
+        .spyOn(service, 'deleteDebt')
+        .mockResolvedValueOnce(debtMock);
+      const response = await controller.deleteDebt(id);
+      expect(response).toBeUndefined();
+      expect(deleteDebtSpy).toHaveBeenCalledWith(id);
+      expect(deleteDebtSpy).toHaveReturnedWith<Debt>(debtMock);
+    });
+    it('should throw NotFoundException when debt not found', async () => {
+      const id = 'some unknown id';
+      jest.spyOn(service, 'deleteDebt').mockResolvedValueOnce(null);
+      expect(controller.deleteDebt(id)).rejects.toThrowError(NotFoundException);
+    });
+  });
 });

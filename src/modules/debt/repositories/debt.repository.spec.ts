@@ -29,6 +29,7 @@ describe('DebtRepository', () => {
             paginate: jest.fn(),
             findById: jest.fn(),
             findByIdAndUpdate: jest.fn(),
+            findByIdAndDelete: jest.fn(),
           },
         },
       ],
@@ -169,7 +170,26 @@ describe('DebtRepository', () => {
   });
 
   describe('deleteDebt', () => {
-    it('', async () => {});
-    it('', async () => {});
+    it('should return deleted debt', async () => {
+      const debtMock = debt;
+      const { _id: id } = debtMock;
+      const findByIdAndDeleteSpy = jest
+        .spyOn(model, 'findByIdAndDelete')
+        .mockResolvedValueOnce(debtMock);
+      const response = await repository.deleteDebt(id);
+      expect(response).toStrictEqual(debtMock);
+      expect(findByIdAndDeleteSpy).toHaveBeenCalledTimes(1);
+      expect(findByIdAndDeleteSpy).toHaveBeenCalledWith(id);
+    });
+    it('should return null when user was not found', async () => {
+      const id = 'some unknown id';
+      const findByIdAndDeleteSpy = jest
+        .spyOn(model, 'findByIdAndDelete')
+        .mockResolvedValueOnce(null);
+      const response = await repository.deleteDebt(id);
+      expect(response).toBeNull();
+      expect(findByIdAndDeleteSpy).toHaveBeenCalledTimes(1);
+      expect(findByIdAndDeleteSpy).toHaveBeenCalledWith(id);
+    });
   });
 });

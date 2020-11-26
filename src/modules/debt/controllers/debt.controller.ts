@@ -11,6 +11,9 @@ import {
   Param,
   NotFoundException,
   Patch,
+  Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { JwtAuthGuard } from 'guards';
 import { DebtCreateDto, DebtUpdateDto } from 'modules/debt/dtos';
@@ -93,6 +96,15 @@ export class DebtController {
       throw new NotFoundException();
     } else {
       return debt;
+    }
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async deleteDebt(@Param('id') id: string): Promise<void> {
+    const debt = await this.debtService.deleteDebt(id);
+    if (!debt) {
+      throw new NotFoundException();
     }
   }
 }

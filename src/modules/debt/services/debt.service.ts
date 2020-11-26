@@ -30,4 +30,8 @@ export class DebtService {
   ): Promise<Debt> {
     return this.debtRepository.updateDebt(id, debt, options);
   }
+
+  async deleteDebt(id: string): Promise<Debt> {
+    return this.debtRepository.deleteDebt(id);
+  }
 }
