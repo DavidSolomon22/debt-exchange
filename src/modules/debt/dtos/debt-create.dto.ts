@@ -7,7 +7,6 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { CurrencyCode } from 'common/constants';
-import { Types } from 'mongoose';
 
 class DebtorCreateDto {
   naturalPerson?: NaturalPersonCreateDto;

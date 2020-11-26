@@ -3,7 +3,8 @@ import { PaginateModel } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
 import { DebtRepository } from 'modules/debt/repositories';
 import { Debt } from 'modules/debt/schemas';
-import { debtCreateDto, debt } from 'modules/debt/mocks';
+import { debtCreateDto, debt, paginatedDebts } from 'modules/debt/mocks';
+import { createEmptyPaginatedResultMock } from 'common/mocks';
 
 describe('DebtRepository', () => {
   let repository: DebtRepository;
@@ -17,6 +18,7 @@ describe('DebtRepository', () => {
           provide: getModelToken('Debt'),
           useValue: {
             create: jest.fn(),
+            paginate: jest.fn(),
           },
         },
       ],
@@ -53,8 +55,20 @@ describe('DebtRepository', () => {
   });
 
   describe('getPaginatedDebts', () => {
-    it('', async () => {});
-    it('', async () => {});
+    it('should return paginated debts', async () => {
+      const getPaginatedDebtsSpy = jest
+        .spyOn(model, 'paginate')
+        .mockResolvedValue(paginatedDebts);
+      const response = await repository.getPaginatedDebts();
+      expect(response).toStrictEqual(paginatedDebts);
+      expect(getPaginatedDebtsSpy).toBeCalledTimes(1);
+    });
+    it('should return empty docs array if users collection is empty', async () => {
+      const emptyPaginatedResult = createEmptyPaginatedResultMock<Debt>();
+      jest.spyOn(model, 'paginate').mockResolvedValue(emptyPaginatedResult);
+      const response = await repository.getPaginatedDebts();
+      expect(response).toStrictEqual(emptyPaginatedResult);
+    });
   });
 
   describe('getDebt', () => {

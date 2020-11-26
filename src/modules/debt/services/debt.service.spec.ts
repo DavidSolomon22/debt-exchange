@@ -1,7 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { DebtRepository } from 'modules/debt/repositories';
 import { DebtService } from 'modules/debt/services';
-import { debtCreateDto, debt } from 'modules/debt/mocks';
+import { debtCreateDto, debt, paginatedDebts } from 'modules/debt/mocks';
+import { Debt } from 'modules/debt/schemas';
+import { createEmptyPaginatedResultMock } from 'common/mocks';
 
 describe('DebtService', () => {
   let service: DebtService;
@@ -15,6 +17,7 @@ describe('DebtService', () => {
           provide: DebtRepository,
           useValue: {
             createDebt: jest.fn(),
+            getPaginatedDebts: jest.fn(),
           },
         },
       ],
@@ -47,6 +50,25 @@ describe('DebtService', () => {
       expect(response).toStrictEqual(debtMock);
       expect(createDebtSpy).toHaveBeenCalledTimes(1);
       expect(createDebtSpy).toHaveBeenCalledWith(debtCreateDto);
+    });
+  });
+
+  describe('getPaginatedDebts', () => {
+    it('should return paginated debts', async () => {
+      const getPaginatedDebtsSpy = jest
+        .spyOn(repository, 'getPaginatedDebts')
+        .mockResolvedValue(paginatedDebts);
+      const response = await service.getPaginatedDebts();
+      expect(response).toStrictEqual(paginatedDebts);
+      expect(getPaginatedDebtsSpy).toBeCalledTimes(1);
+    });
+    it('should return empty docs array if users collection is empty', async () => {
+      const emptyPaginatedResult = createEmptyPaginatedResultMock<Debt>();
+      jest
+        .spyOn(repository, 'getPaginatedDebts')
+        .mockResolvedValue(emptyPaginatedResult);
+      const response = await service.getPaginatedDebts();
+      expect(response).toStrictEqual(emptyPaginatedResult);
     });
   });
 });

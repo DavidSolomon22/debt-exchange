@@ -3,6 +3,8 @@ import { AuthService } from 'modules/auth/services';
 import { DebtController } from 'modules/debt/controllers';
 import { DebtService } from 'modules/debt/services';
 import { debtCreateDto, debt, paginatedDebts } from 'modules/debt/mocks';
+import { createEmptyPaginatedResultMock } from 'common/mocks';
+import { Debt } from 'modules/debt/schemas';
 
 describe('DebtController', () => {
   let controller: DebtController;
@@ -58,15 +60,21 @@ describe('DebtController', () => {
 
   describe('getDebts', () => {
     it('should return paginated debts', async () => {
-      jest
+      const getPaginatedDebtsSpy = jest
         .spyOn(service, 'getPaginatedDebts')
         .mockResolvedValue(paginatedDebts);
       const response = await controller.getDebts();
       expect(response).toStrictEqual(paginatedDebts);
-      // expect(service.getPaginatedDebts).toBeCalledWith({}, {});
-      // expect(service.getPaginatedDebts).toBeCalledTimes(1);
+      expect(getPaginatedDebtsSpy).toBeCalledTimes(1);
     });
-    it('should return empty docs array if users collection is empty', async () => {});
+    it('should return empty docs array if users collection is empty', async () => {
+      const emptyPaginatedResult = createEmptyPaginatedResultMock<Debt>();
+      jest
+        .spyOn(service, 'getPaginatedDebts')
+        .mockResolvedValue(emptyPaginatedResult);
+      const response = await controller.getDebts();
+      expect(response).toStrictEqual(emptyPaginatedResult);
+    });
   });
 
   describe('', () => {});

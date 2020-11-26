@@ -13,8 +13,13 @@ export class DebtService {
   }
 
   async getPaginatedDebts(
-    options: PaginateOptions,
+    options: PaginateOptions = {},
+    filterParams: any = {},
   ): Promise<PaginateResult<Debt>> {
     return this.debtRepository.getPaginatedDebts(options);
+  }
+
+  async getDebt(id: string, options: PaginateOptions = {}): Promise<Debt> {
+    return await this.debtRepository.getDebt(id, options);
   }
 }

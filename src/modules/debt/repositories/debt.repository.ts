@@ -18,14 +18,14 @@ export class DebtRepository {
 
   // ogarnac populate + parsowanie populate pipe, zeby mozna bylo tworzyc obiekty (dla zagniezdzonych pol)
   async getPaginatedDebts(
-    options: PaginateOptions,
+    options: PaginateOptions = {},
     filterQuery: FilterQuery<Debt> = {},
   ): Promise<PaginateResult<Debt>> {
     return this.debtModel.paginate(filterQuery, options);
   }
 
   // ogarnac populate
-  async getDebt(id: string, options: PaginateOptions): Promise<Debt> {
+  async getDebt(id: string, options: PaginateOptions = {}): Promise<Debt> {
     const { select, populate } = options;
     let { lean } = options;
     if (lean === undefined || lean === null) {
