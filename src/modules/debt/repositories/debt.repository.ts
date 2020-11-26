@@ -21,7 +21,7 @@ export class DebtRepository {
     options: PaginateOptions,
     filterQuery: FilterQuery<Debt> = {},
   ): Promise<PaginateResult<Debt>> {
-    return await this.debtModel.paginate(filterQuery, options);
+    return this.debtModel.paginate(filterQuery, options);
   }
 
   // ogarnac populate

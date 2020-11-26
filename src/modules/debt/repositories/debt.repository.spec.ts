@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PaginateModel } from 'mongoose';
 import { getModelToken } from '@nestjs/mongoose';
-import { createMock } from '@golevelup/ts-jest';
 import { DebtRepository } from 'modules/debt/repositories';
 import { Debt } from 'modules/debt/schemas';
+import { debtCreateDto, debt } from 'modules/debt/mocks';
 
 describe('DebtRepository', () => {
   let repository: DebtRepository;
@@ -17,8 +17,6 @@ describe('DebtRepository', () => {
           provide: getModelToken('Debt'),
           useValue: {
             create: jest.fn(),
-            findOne: jest.fn(),
-            findByIdAndDelete: jest.fn(),
           },
         },
       ],
@@ -41,8 +39,17 @@ describe('DebtRepository', () => {
   });
 
   describe('createDebt', () => {
-    it('', async () => {});
-    it('', async () => {});
+    it('should return created user', async () => {
+      const debtMock = debt;
+      debtMock._id = '5fa10b96ffae5a394a8c6b21';
+      const createDebtSpy = jest
+        .spyOn(model, 'create')
+        .mockResolvedValue(debtMock);
+      const response = await repository.createDebt(debtCreateDto);
+      expect(response).toStrictEqual(debtMock);
+      expect(createDebtSpy).toHaveBeenCalledTimes(1);
+      expect(createDebtSpy).toHaveBeenCalledWith(debtCreateDto);
+    });
   });
 
   describe('getPaginatedDebts', () => {
@@ -64,20 +71,4 @@ describe('DebtRepository', () => {
     it('', async () => {});
     it('', async () => {});
   });
-
-  // describe('createEmailToken', () => {
-  //   it('should return created email token', async () => {
-  //     const createdEmailToken = createMock<EmailToken>({
-  //       ...emailTokenCreateDto,
-  //     });
-  //     createdEmailToken._id = 'some id';
-  //     const createSpy = jest
-  //       .spyOn(model, 'create')
-  //       .mockResolvedValueOnce(createdEmailToken);
-  //     const response = await repository.createEmailToken(emailTokenCreateDto);
-  //     expect(response).toStrictEqual(createdEmailToken);
-  //     expect(createSpy).toHaveBeenCalledTimes(1);
-  //     expect(createSpy).toHaveBeenCalledWith(emailTokenCreateDto);
-  //   });
-  // });
 });

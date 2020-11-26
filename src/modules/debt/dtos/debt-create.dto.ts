@@ -1,10 +1,12 @@
 import { Type } from 'class-transformer';
 import {
+  IsEnum,
   IsMongoId,
   IsNotEmpty,
   IsOptional,
   ValidateNested,
 } from 'class-validator';
+import { CurrencyCode } from 'common/constants';
 import { Types } from 'mongoose';
 
 class DebtorCreateDto {
@@ -83,7 +85,7 @@ class BankAccountCreateDto {
 export class DebtCreateDto {
   @IsNotEmpty()
   @IsMongoId()
-  owner: Types.ObjectId;
+  owner: string;
 
   @IsNotEmpty()
   @ValidateNested({ each: true })
@@ -97,6 +99,7 @@ export class DebtCreateDto {
   amount: number;
 
   @IsNotEmpty()
+  @IsEnum(CurrencyCode)
   currencyCode: string;
 
   @IsNotEmpty()
