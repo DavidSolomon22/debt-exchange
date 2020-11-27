@@ -113,4 +113,47 @@ describe('DebtController (e2e)', () => {
       });
     });
   });
+
+  describe('/debts/:id (PATCH)', () => {
+    it('should return updated debt', async () => {
+      const res = await request(server)
+        .patch(`/debts/${debtCreated._id}`)
+        .set('Cookie', [authCookies])
+        .send({
+          amount: 10000,
+        });
+      expect(res.status).toEqual(200);
+      expect(res.body.amount).toBe<number>(10000);
+    });
+    it('should return 404 when debt not found', async () => {
+      const res = await request(server)
+        .patch(`/debts/5fb6bfb3af265e00204e078a`)
+        .set('Cookie', [authCookies]);
+      expect(res.status).toEqual(404);
+      expect(res.body).toStrictEqual({
+        statusCode: 404,
+        message: 'Not Found',
+      });
+    });
+  });
+
+  describe('/debts/:id (DELETE)', () => {
+    it('should return updated debt', async () => {
+      const res = await request(server)
+        .delete(`/debts/${debtCreated._id}`)
+        .set('Cookie', [authCookies]);
+      expect(res.status).toEqual(204);
+      expect(res.body).toStrictEqual({});
+    });
+    it('should return 404 when debt not found', async () => {
+      const res = await request(server)
+        .delete(`/debts/5fb6bfb3af265e00204e078a`)
+        .set('Cookie', [authCookies]);
+      expect(res.status).toEqual(404);
+      expect(res.body).toStrictEqual({
+        statusCode: 404,
+        message: 'Not Found',
+      });
+    });
+  });
 });
