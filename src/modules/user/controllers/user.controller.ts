@@ -17,14 +17,13 @@ import {
 import { UserDto, UserUpdateDto } from 'modules/user/dtos';
 import { ParseSortParamsPipe } from 'pipes';
 import { UserService } from 'modules/user/services';
-import { JwtAuthGuard, RolesGuard } from 'guards';
+import { JwtAuthGuard } from 'guards';
 import { PaginateResult } from 'mongoose';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
-@UseGuards(JwtAuthGuard)
-@UseGuards(RolesGuard)
 @ApiTags('users')
+@UseGuards(JwtAuthGuard)
 @ApiCookieAuth()
 export class UserController {
   constructor(private userService: UserService) {}
