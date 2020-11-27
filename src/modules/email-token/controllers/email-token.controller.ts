@@ -5,9 +5,11 @@ import {
   NotFoundException,
   Query,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { EmailTokenService } from '../services';
 
 @Controller('email-tokens')
+@ApiTags('email-tokens')
 export class EmailTokenController {
   constructor(private emailTokenService: EmailTokenService) {}
 

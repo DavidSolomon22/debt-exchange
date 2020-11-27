@@ -15,13 +15,16 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
+import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'guards';
 import { DebtCreateDto, DebtUpdateDto } from 'modules/debt/dtos';
 import { DebtService } from 'modules/debt/services';
 import { ParseSortParamsPipe } from 'pipes';
 
 @Controller('debts')
+@ApiTags('debts')
 @UseGuards(JwtAuthGuard)
+@ApiCookieAuth()
 export class DebtController {
   constructor(private debtService: DebtService) {}
 

@@ -8,6 +8,8 @@ import {
   MongooseExceptionFilter,
 } from 'filters';
 import { validationPipeConfig } from 'config';
+import { SwaggerModule } from '@nestjs/swagger';
+import { options } from 'config/swagger.config';
 
 declare const module: any;
 
@@ -29,6 +31,9 @@ async function bootstrap() {
       enableImplicitConversion: true,
     }),
   );
+
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup('swagger', app, document);
 
   const configService = app.get(ConfigService);
   const port = configService.get<number>('PORT');

@@ -14,8 +14,10 @@ import { AuthService } from 'modules/auth/services';
 import { LocalAuthGuard } from 'guards';
 import { plainToClass } from 'class-transformer';
 import { ResetPasswordDto } from '../dtos/reset-password.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('auth')
+@ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
