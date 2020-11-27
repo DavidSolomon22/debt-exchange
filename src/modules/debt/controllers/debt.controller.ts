@@ -16,7 +16,9 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'guards';
+import { UserRole } from 'common/constants';
+import { Roles } from 'decorators';
+import { JwtAuthGuard, DebtAccessGuard } from 'guards';
 import { DebtCreateDto, DebtUpdateDto } from 'modules/debt/dtos';
 import { DebtService } from 'modules/debt/services';
 import { ParseSortParamsPipe } from 'pipes';
@@ -62,6 +64,8 @@ export class DebtController {
   }
 
   @Get(':id')
+  @Roles(UserRole.ADMIN)
+  @UseGuards(DebtAccessGuard)
   async getDebt(
     @Param('id') id: string,
     @Query('fields', new DefaultValuePipe([]), ParseArrayPipe)
