@@ -126,7 +126,7 @@ class BankAccountUpdateDto {
 export class DebtUpdateDto {
   @IsMongoId()
   @IsOptional()
-  owner?: string;
+  debtOwner?: string;
 
   @ValidateNested({ each: true })
   @Type(() => DebtorUpdateDto)

@@ -26,6 +26,6 @@ export class DebtAccessGuard extends RolesGuard implements CanActivate {
   }
 
   private checkIfDebtOwner(debt, userId: string): boolean {
-    return debt.owner === userId;
+    return debt.debtOwner === userId;
   }
 }

@@ -14,7 +14,7 @@ export const debt = createMock<Debt>({
     country: Country.PL,
   },
   dueDate: new Date(),
-  owner: new Types.ObjectId('5fa10b96ffae5a394a8c6b21'),
+  debtOwner: new Types.ObjectId('5fa10b96ffae5a394a8c6b21'),
 });
 
 export const paginatedDebts = createMock<PaginateResult<Debt>>({
@@ -28,7 +28,7 @@ export const paginatedDebts = createMock<PaginateResult<Debt>>({
         country: Country.PL,
       },
       dueDate: new Date('2020-10-10'),
-      owner: new Types.ObjectId('5fa10b96ffae5a394a8c6b21'),
+      debtOwner: new Types.ObjectId('5fa10b96ffae5a394a8c6b21'),
     },
     {
       _id: new Types.ObjectId() as any,
@@ -39,7 +39,7 @@ export const paginatedDebts = createMock<PaginateResult<Debt>>({
         country: Country.DE,
       },
       dueDate: new Date('2020-11-10'),
-      owner: new Types.ObjectId('5fbe7a331f881d0091cbbdee'),
+      debtOwner: new Types.ObjectId('5fbe7a331f881d0091cbbdee'),
     },
     {
       _id: new Types.ObjectId() as any,
@@ -50,7 +50,7 @@ export const paginatedDebts = createMock<PaginateResult<Debt>>({
         country: Country.US,
       },
       dueDate: new Date('2020-12-10'),
-      owner: new Types.ObjectId('5fbe7bacaf793200be87d277'),
+      debtOwner: new Types.ObjectId('5fbe7bacaf793200be87d277'),
     },
   ],
   hasNextPage: false,
@@ -69,7 +69,7 @@ export const debtCreateDto: DebtCreateDto = {
     country: Country.PL,
   },
   dueDate: new Date(),
-  owner: '5fa10b96ffae5a394a8c6b21',
+  debtOwner: '5fa10b96ffae5a394a8c6b21',
 };
 
 export const debtsForCreation: DebtCreateDto[] = [
@@ -81,7 +81,7 @@ export const debtsForCreation: DebtCreateDto[] = [
       country: Country.PL,
     },
     dueDate: new Date('2020-10-10'),
-    owner: '5fa10b96ffae5a394a8c6b21',
+    debtOwner: '5fa10b96ffae5a394a8c6b21',
   },
   {
     amount: 20,
@@ -91,7 +91,7 @@ export const debtsForCreation: DebtCreateDto[] = [
       country: Country.DE,
     },
     dueDate: new Date('2020-11-10'),
-    owner: '5fbe7a331f881d0091cbbdee',
+    debtOwner: '5fbe7a331f881d0091cbbdee',
   },
   {
     amount: 30,
@@ -101,7 +101,7 @@ export const debtsForCreation: DebtCreateDto[] = [
       country: Country.US,
     },
     dueDate: new Date('2020-12-10'),
-    owner: '5fbe7bacaf793200be87d277',
+    debtOwner: '5fbe7bacaf793200be87d277',
   },
 ];
 
@@ -113,7 +113,7 @@ export const debtUpdateDto: DebtUpdateDto = {
     country: Country.PL,
   },
   dueDate: new Date(),
-  owner: '5fa10b96ffae5a394a8c6b21',
+  debtOwner: '5fa10b96ffae5a394a8c6b21',
 };
 
 export const mongooseUpdateOptions = {

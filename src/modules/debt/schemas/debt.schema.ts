@@ -17,7 +17,7 @@ export class Debt extends Document {
     ref: 'User',
     required: true,
   })
-  owner: Types.ObjectId;
+  debtOwner: Types.ObjectId;
 
   @Prop({
     type: DebtorSchema,

@@ -84,7 +84,7 @@ class BankAccountCreateDto {
 export class DebtCreateDto {
   @IsNotEmpty()
   @IsMongoId()
-  owner: string;
+  debtOwner: string;
 
   @IsNotEmpty()
   @ValidateNested({ each: true })
