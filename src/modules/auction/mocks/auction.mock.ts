@@ -128,3 +128,7 @@ export const bids = createMock<Bid[]>([
     bidTimestamp: tomorrow,
   },
 ]);
+
+export const auctionBids = createMock<Auction>({
+  bidHistory: bids,
+});

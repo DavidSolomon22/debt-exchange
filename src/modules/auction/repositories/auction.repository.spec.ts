@@ -16,6 +16,7 @@ import {
   auctionId,
   paginatedAuctions,
   bids,
+  auctionBids,
 } from '../mocks';
 import { createMock } from '@golevelup/ts-jest';
 
@@ -90,7 +91,9 @@ describe('AuctionRepository', () => {
       expect(findByIdAndUpdateSpy).toHaveBeenCalledTimes(1);
       expect(findByIdAndUpdateSpy).toHaveBeenCalledWith(
         auctionId,
-        iBidCreateMock,
+        {
+          $push: { bidHistory: iBidCreateMock },
+        },
         mongooseUpdateOptions,
       );
     });
@@ -156,19 +159,17 @@ describe('AuctionRepository', () => {
     it('should return array of all auction bids', async () => {
       // idk how to check what param was passed to chain function
       // for example i would like to check that select was invoked only with 'bidhistory' param
-      const bidsMock = bids;
+      const auctionBidsMock = auctionBids;
       const findByIdSpy = jest.spyOn(model, 'findById').mockReturnValueOnce(
         createMock<DocumentQuery<Auction, Auction, unknown>>({
           select: () => ({
-            populate: () => ({
-              lean: jest.fn().mockResolvedValueOnce(bidsMock),
-            }),
+            lean: jest.fn().mockResolvedValueOnce(auctionBidsMock),
           }),
         }),
       );
       const response = await repository.getAuctionBids(auctionId);
       expect(response).toBeDefined();
-      expect(response).toStrictEqual(bidsMock);
+      expect(response).toStrictEqual(auctionBidsMock);
       expect(findByIdSpy).toHaveBeenCalledTimes(1);
       expect(findByIdSpy).toHaveBeenCalledWith(auctionId);
     });
@@ -176,9 +177,7 @@ describe('AuctionRepository', () => {
       const findByIdSpy = jest.spyOn(model, 'findById').mockReturnValueOnce(
         createMock<DocumentQuery<Auction, Auction, unknown>>({
           select: () => ({
-            populate: () => ({
-              lean: jest.fn().mockResolvedValueOnce([]),
-            }),
+            lean: jest.fn().mockResolvedValueOnce([]),
           }),
         }),
       );
@@ -193,9 +192,7 @@ describe('AuctionRepository', () => {
       const findByIdSpy = jest.spyOn(model, 'findById').mockReturnValueOnce(
         createMock<DocumentQuery<Auction, Auction, unknown>>({
           select: () => ({
-            populate: () => ({
-              lean: jest.fn().mockResolvedValueOnce(null),
-            }),
+            lean: jest.fn().mockResolvedValueOnce(null),
           }),
         }),
       );
@@ -214,7 +211,7 @@ describe('AuctionRepository', () => {
       const findByIdAndDeleteSpy = jest
         .spyOn(model, 'findByIdAndDelete')
         .mockResolvedValueOnce(auctionMock);
-      const response = await repository.getAuction(id);
+      const response = await repository.deleteAuction(id);
       expect(response).toStrictEqual(auctionMock);
       expect(findByIdAndDeleteSpy).toHaveBeenCalledTimes(1);
       expect(findByIdAndDeleteSpy).toHaveBeenCalledWith(id);
