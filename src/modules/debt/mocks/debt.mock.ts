@@ -74,7 +74,7 @@ export const debtCreateDto: DebtCreateDto = {
 
 export const debtsForCreation: DebtCreateDto[] = [
   {
-    amount: 10,
+    amount: 423,
     currencyCode: CurrencyCode.PLN,
     debtor: {
       legalStatus: LegalStatus.NATURAL_PERSON,
@@ -114,10 +114,4 @@ export const debtUpdateDto: DebtUpdateDto = {
   },
   dueDate: new Date(),
   debtOwner: '5fa10b96ffae5a394a8c6b21',
-};
-
-export const mongooseUpdateOptions = {
-  new: true,
-  runValidators: true,
-  context: 'query',
 };

@@ -8,9 +8,11 @@ import {
   debt,
   paginatedDebts,
   debtUpdateDto,
-  mongooseUpdateOptions,
 } from 'modules/debt/mocks';
-import { createEmptyPaginatedResultMock } from 'common/mocks';
+import {
+  createEmptyPaginatedResultMock,
+  mongooseUpdateOptions,
+} from 'common/mocks';
 import { createMock } from '@golevelup/ts-jest';
 import { DocumentQuery } from 'mongoose';
 

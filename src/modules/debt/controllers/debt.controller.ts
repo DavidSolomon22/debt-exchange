@@ -22,6 +22,7 @@ import { JwtAuthGuard, DebtAccessGuard } from 'guards';
 import { DebtCreateDto, DebtUpdateDto } from 'modules/debt/dtos';
 import { DebtService } from 'modules/debt/services';
 import { ParseSortParamsPipe } from 'pipes';
+import { DebtRepository } from '../repositories';
 
 @Controller('debts')
 @ApiTags('debts')

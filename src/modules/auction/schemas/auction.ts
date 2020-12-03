@@ -19,6 +19,13 @@ export class Auction extends Document {
   auctionFounder: Types.ObjectId; // not in create dto (taken from jwt (req.user))
 
   @Prop({
+    type: [Types.ObjectId],
+    ref: 'Debt',
+    required: true,
+  })
+  debtsForSale: Types.ObjectId[]; // in create dto
+
+  @Prop({
     type: Date,
     required: true,
   })

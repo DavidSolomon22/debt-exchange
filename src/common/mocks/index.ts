@@ -15,3 +15,9 @@ export const createEmptyPaginatedResultMock = <T extends unknown>(): DeepMocked<
     totalPages: 1,
   });
 };
+
+export const mongooseUpdateOptions = {
+  new: true,
+  runValidators: true,
+  context: 'query',
+};
