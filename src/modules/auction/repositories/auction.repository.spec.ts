@@ -9,7 +9,7 @@ import { DocumentQuery } from 'mongoose';
 import { Auction } from '../schemas';
 import { AuctionRepository } from '.';
 import {
-  newAuction,
+  auction,
   iAuctionCreate,
   newBid,
   iBidCreate,
@@ -60,13 +60,13 @@ describe('AuctionRepository', () => {
   describe('createAuction', () => {
     it('should return created auction', async () => {
       const iAuctionCreateMock = iAuctionCreate;
-      const newAuctionMock = newAuction;
+      const auctionMock = auction;
       const createSpy = jest
         .spyOn(model, 'create')
-        .mockResolvedValue(newAuctionMock);
+        .mockResolvedValue(auctionMock);
       const response = await repository.createAuction(iAuctionCreateMock);
       expect(response).toBeDefined();
-      expect(response).toStrictEqual(newAuctionMock);
+      expect(response).toStrictEqual(auctionMock);
       expect(createSpy).toHaveBeenCalledTimes(1);
       expect(createSpy).toHaveBeenCalledWith(iAuctionCreateMock);
     });
@@ -120,7 +120,7 @@ describe('AuctionRepository', () => {
 
   describe('getAuction', () => {
     it('should return one auction', async () => {
-      const auctionMock = newAuction;
+      const auctionMock = auction;
       const id = 'some id';
       auctionMock._id = id;
       const findByIdSpy = jest.spyOn(model, 'findById').mockReturnValueOnce(
@@ -205,7 +205,7 @@ describe('AuctionRepository', () => {
 
   describe('deleteAuction', () => {
     it('should return deleted auction', async () => {
-      const auctionMock = newAuction;
+      const auctionMock = auction;
       const id = 'some id';
       auctionMock._id = id;
       const findByIdAndDeleteSpy = jest

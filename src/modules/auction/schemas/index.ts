@@ -1,1 +1,1 @@
-export * from './auction';
+export * from './auction.schema';

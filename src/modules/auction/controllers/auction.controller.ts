@@ -10,33 +10,46 @@ import {
   Query,
   Param,
   NotFoundException,
-  Patch,
   Delete,
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
-import { UserRole } from 'common/constants';
-import { Roles } from 'decorators';
-import { JwtAuthGuard, DebtAccessGuard } from 'guards';
-import { DebtCreateDto, DebtUpdateDto } from 'modules/debt/dtos';
-import { DebtService } from 'modules/debt/services';
+import { PaginateResult } from 'mongoose';
+import { JwtAuthGuard } from 'guards';
 import { ParseSortParamsPipe } from 'pipes';
+import { Auction } from '../schemas';
+import { AuctionService } from '../services';
+import { Bid } from '../schemas/subschemas/bid.schema';
+import { User } from 'decorators';
+import { AuctionCreateDto, BidCreateDto } from '../dtos';
 
-@Controller('debts')
-@ApiTags('debts')
+@Controller('auctions')
+@ApiTags('auctions')
 @UseGuards(JwtAuthGuard)
 @ApiCookieAuth()
-export class DebtController {
-  constructor(private debtService: DebtService) {}
+export class AuctionController {
+  constructor(private auctionService: AuctionService) {}
 
   @Post()
-  async createDebt(@Body() createDebtDto: DebtCreateDto) {
-    return await this.debtService.createDebt(createDebtDto);
+  async createAuction(
+    @Body() auctionCreateDto: AuctionCreateDto,
+    @User('userId') auctionFounder: string,
+  ): Promise<Auction> {
+    return this.auctionService.createAuction(auctionCreateDto, auctionFounder);
+  }
+
+  @Post(':id/bids')
+  async createBid(
+    @Param('id') id: string,
+    @Body() bidCreateDto: BidCreateDto,
+    @User('userId') bidder: string,
+  ): Promise<Bid[]> {
+    return this.auctionService.createBid(id, bidCreateDto, bidder);
   }
 
   @Get()
-  async getDebts(
+  async getAuctions(
     @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
     pageNumber?: number,
     @Query('pageSize', new DefaultValuePipe(10), ParseIntPipe)
@@ -52,7 +65,7 @@ export class DebtController {
       new ParseSortParamsPipe(),
     )
     orderBy?: string,
-  ) {
+  ): Promise<PaginateResult<Auction>> {
     const options = {
       page: pageNumber,
       limit: pageSize,
@@ -60,57 +73,44 @@ export class DebtController {
       populate: populates,
       sort: orderBy,
     };
-    return await this.debtService.getPaginatedDebts(options);
+    return await this.auctionService.getPaginatedAuctions(options);
   }
 
   @Get(':id')
-  @Roles(UserRole.ADMIN)
-  @UseGuards(DebtAccessGuard)
-  async getDebt(
+  async getAuction(
     @Param('id') id: string,
     @Query('fields', new DefaultValuePipe([]), ParseArrayPipe)
     fields?: string[],
     @Query('populates', new DefaultValuePipe([]), ParseArrayPipe)
     populates?: string[], // check on real populate
-  ) {
+  ): Promise<Auction> {
     const options = {
       select: fields,
       populate: populates,
     };
-    const debt = await this.debtService.getDebt(id, options);
-    if (!debt) {
+    const auction = await this.auctionService.getAuction(id, options);
+    if (!auction) {
       throw new NotFoundException();
     } else {
-      return debt;
+      return auction;
     }
   }
 
-  @Patch(':id')
-  async updateDebt(
-    @Param('id') id: string,
-    @Body() debtUpdateDto: DebtUpdateDto,
-    @Query('fields', new DefaultValuePipe([]), ParseArrayPipe)
-    fields?: string[],
-    @Query('populates', new DefaultValuePipe([]), ParseArrayPipe)
-    populates?: string[], // check on real populate
-  ) {
-    const options = {
-      select: fields,
-      populate: populates,
-    };
-    const debt = await this.debtService.updateDebt(id, debtUpdateDto, options);
-    if (!debt) {
+  @Get(':id/bids')
+  async getAuctionBids(@Param('id') id: string): Promise<Bid[]> {
+    const auctionBids = await this.auctionService.getAuctionBids(id);
+    if (!auctionBids) {
       throw new NotFoundException();
     } else {
-      return debt;
+      return auctionBids;
     }
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteDebt(@Param('id') id: string): Promise<void> {
-    const debt = await this.debtService.deleteDebt(id);
-    if (!debt) {
+  async deleteAuction(@Param('id') id: string): Promise<void> {
+    const auction = await this.auctionService.deleteAuction(id);
+    if (!auction) {
       throw new NotFoundException();
     }
   }

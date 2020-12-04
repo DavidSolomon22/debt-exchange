@@ -48,7 +48,7 @@ describe('DebtService', () => {
   });
 
   describe('createDebt', () => {
-    it('should return created user', async () => {
+    it('should return created debt', async () => {
       const debtMock = debt;
       debtMock._id = '5fa10b96ffae5a394a8c6b21';
       const createDebtSpy = jest
@@ -70,7 +70,7 @@ describe('DebtService', () => {
       expect(response).toStrictEqual(paginatedDebts);
       expect(getPaginatedDebtsSpy).toBeCalledTimes(1);
     });
-    it('should return empty docs array if users collection is empty', async () => {
+    it('should return empty docs array if debts collection is empty', async () => {
       const emptyPaginatedResult = createEmptyPaginatedResultMock<Debt>();
       jest
         .spyOn(repository, 'getPaginatedDebts')
@@ -142,7 +142,7 @@ describe('DebtService', () => {
       expect(deleteDebtSpy).toHaveBeenCalledTimes(1);
       expect(deleteDebtSpy).toHaveBeenCalledWith(id);
     });
-    it('should return null when user was not found', async () => {
+    it('should return null when debt was not found', async () => {
       const id = 'some unknown id';
       const deleteDebtSpy = jest
         .spyOn(repository, 'deleteDebt')

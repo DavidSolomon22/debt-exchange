@@ -4,5 +4,5 @@ export interface IAuctionCreate {
   debtsForSale: string[];
   auctionEndTime: Date;
   startingPrice: number;
-  buyNowPrice: number;
+  buyNowPrice?: number;
 }

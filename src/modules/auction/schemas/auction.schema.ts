@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types } from 'mongoose';
-import { Bid } from './subschemas/bid.schema';
+import { Bid, BidSchema } from './subschemas/bid.schema';
 
 @Schema()
 export class Auction extends Document {
@@ -32,7 +32,7 @@ export class Auction extends Document {
   auctionEndTime: Date; // in create dto
 
   @Prop({
-    type: [Bid],
+    type: [BidSchema],
     required: true,
     default: [],
   })
