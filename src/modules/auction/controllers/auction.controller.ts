@@ -14,7 +14,7 @@ import {
   HttpCode,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import { ApiCookieAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { PaginateResult } from 'mongoose';
 import { JwtAuthGuard } from 'guards';
 import { ParseSortParamsPipe } from 'pipes';
@@ -49,6 +49,11 @@ export class AuctionController {
   }
 
   @Get()
+  @ApiQuery({ name: 'pageNumber', required: false })
+  @ApiQuery({ name: 'pageSize', required: false })
+  @ApiQuery({ name: 'fields', required: false })
+  @ApiQuery({ name: 'populates', required: false })
+  @ApiQuery({ name: 'orderBy', required: false })
   async getAuctions(
     @Query('pageNumber', new DefaultValuePipe(1), ParseIntPipe)
     pageNumber?: number,
@@ -57,7 +62,7 @@ export class AuctionController {
     @Query('fields', new DefaultValuePipe([]), ParseArrayPipe)
     fields?: string[],
     @Query('populates', new DefaultValuePipe([]), ParseArrayPipe)
-    populates?: string[], // check on real populate
+    populates?: string[],
     @Query(
       'orderBy',
       new DefaultValuePipe([]),
@@ -77,12 +82,14 @@ export class AuctionController {
   }
 
   @Get(':id')
+  @ApiQuery({ name: 'fields', required: false })
+  @ApiQuery({ name: 'populates', required: false })
   async getAuction(
     @Param('id') id: string,
     @Query('fields', new DefaultValuePipe([]), ParseArrayPipe)
     fields?: string[],
     @Query('populates', new DefaultValuePipe([]), ParseArrayPipe)
-    populates?: string[], // check on real populate
+    populates?: string[],
   ): Promise<Auction> {
     const options = {
       select: fields,
