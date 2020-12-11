@@ -2,6 +2,7 @@
 import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuctionController } from './controllers';
+import { AuctionGateway } from './gateways';
 import { AuctionRepository } from './repositories';
 import { Auction, AuctionSchema } from './schemas';
 import { AuctionService } from './services';
@@ -22,6 +23,6 @@ import { AuctionService } from './services';
   ],
   controllers: [AuctionController],
   exports: [],
-  providers: [AuctionRepository, AuctionService],
+  providers: [AuctionRepository, AuctionService, AuctionGateway],
 })
 export class AuctionModule {}

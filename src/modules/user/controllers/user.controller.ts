@@ -20,6 +20,7 @@ import { UserService } from 'modules/user/services';
 import { JwtAuthGuard } from 'guards';
 import { PaginateResult } from 'mongoose';
 import { ApiCookieAuth, ApiTags } from '@nestjs/swagger';
+import { User } from '../schemas';
 
 @Controller('users')
 @UseGuards(JwtAuthGuard)
@@ -50,7 +51,7 @@ export class UserController {
     minAge?: number,
     @Query('maxAge', new DefaultValuePipe(1000), ParseIntPipe)
     maxAge?: number,
-  ): Promise<PaginateResult<UserDto>> {
+  ): Promise<PaginateResult<User>> {
     const options = {
       page: pageNumber,
       limit: pageSize,
@@ -72,7 +73,7 @@ export class UserController {
     fields?: string[],
     @Query('populates', new DefaultValuePipe([]), ParseArrayPipe)
     populates?: string[], // check on real populate
-  ): Promise<UserDto> {
+  ): Promise<User> {
     const options = {
       select: fields,
       populate: populates,
@@ -93,7 +94,7 @@ export class UserController {
     fields?: string[],
     @Query('populates', new DefaultValuePipe([]), ParseArrayPipe)
     populates?: string[], // check on real populate
-  ): Promise<UserDto> {
+  ): Promise<User> {
     const options = {
       select: fields,
       populate: populates,
