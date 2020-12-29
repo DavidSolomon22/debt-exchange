@@ -23,20 +23,37 @@ import { AuctionService } from '../services';
 import { Bid } from '../schemas/subschemas/bid.schema';
 import { User } from 'decorators';
 import { AuctionCreateDto, BidCreateDto } from '../dtos';
+import { RedisService } from 'nestjs-redis';
+import { Redis } from 'ioredis';
 
 @Controller('auctions')
 @ApiTags('auctions')
 @UseGuards(JwtAuthGuard)
 @ApiCookieAuth()
 export class AuctionController {
-  constructor(private auctionService: AuctionService) {}
+  redisClient: Redis;
+
+  constructor(
+    private auctionService: AuctionService,
+    private redisService: RedisService,
+  ) {
+    this.redisClient = this.redisService.getClient();
+  }
 
   @Post()
   async createAuction(
     @Body() auctionCreateDto: AuctionCreateDto,
     @User('userId') auctionFounder: string,
   ): Promise<Auction> {
-    return this.auctionService.createAuction(auctionCreateDto, auctionFounder);
+    const createdAuction = await this.auctionService.createAuction(
+      auctionCreateDto,
+      auctionFounder,
+    );
+    await this.redisClient.hmset(`auction:${createdAuction._id}`, [
+      'bidHistory',
+      createdAuction.bidHistory,
+    ]);
+    return createdAuction;
   }
 
   @Post(':id/bids')
@@ -95,6 +112,8 @@ export class AuctionController {
       select: fields,
       populate: populates,
     };
+    const activeAuction = await this.redisClient.hgetall(`auction:${id}`);
+    console.log('activeAuction :>> ', activeAuction);
     const auction = await this.auctionService.getAuction(id, options);
     if (!auction) {
       throw new NotFoundException();

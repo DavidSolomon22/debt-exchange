@@ -2,7 +2,7 @@ import {
   ArrayNotEmpty,
   ArrayUnique,
   IsArray,
-  IsDate,
+  IsDateString,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -19,7 +19,7 @@ export class AuctionCreateDto {
   debtsForSale: string[];
 
   @IsNotEmpty()
-  @IsDate()
+  @IsDateString()
   auctionEndTime: Date;
 
   @IsNotEmpty()

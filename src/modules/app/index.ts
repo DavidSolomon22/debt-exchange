@@ -9,6 +9,7 @@ import { AuthModule } from 'modules/auth';
 import { DebtModule } from 'modules/debt';
 import { EmailTokenModule } from 'modules/email-token';
 import { UserModule } from 'modules/user';
+import { RedisModule } from 'nestjs-redis';
 
 @Module({
   imports: [
@@ -16,6 +17,14 @@ import { UserModule } from 'modules/user';
     MongooseModule.forRootAsync({
       imports: [ConfigModule],
       useClass: MongooseConfigService,
+      inject: [ConfigService],
+    }),
+    RedisModule.forRootAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        host: configService.get('REDIS_HOST'),
+        port: configService.get('REDIS_PORT'),
+      }),
       inject: [ConfigService],
     }),
     MailerModule.forRootAsync({

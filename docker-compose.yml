@@ -20,6 +20,8 @@ services:
       - PORT=3000
       - JWT_SECRET=U68kT5rUQuVEKqDMqzbd
       - MONGO_URL=mongodb://mongo:27017/debt-exchange-db
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
     ports:
       - '8080:3000'
     depends_on:
